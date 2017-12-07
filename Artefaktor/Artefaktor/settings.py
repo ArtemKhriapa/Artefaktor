@@ -44,7 +44,18 @@ INSTALLED_APPS = [
     'apps.incubator',
     'apps.layar',
     'apps.POI',
-    'apps.wallet'
+    'apps.wallet',
+
+    'apps.bonusshop.cart',
+    'apps.bonusshop.catalog',
+    'apps.bonusshop.product',
+    'apps.bonusshop.order',
+    'apps.bonusshop.filter',
+
+    'apps.extraapps.OTC',
+    'apps.extraapps.notifications',
+    'apps.extraapps.images'
+
 ]
 
 MIDDLEWARE = [
