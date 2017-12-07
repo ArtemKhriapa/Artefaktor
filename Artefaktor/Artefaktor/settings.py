@@ -38,7 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_filters'
+    'django_filters',
+
+    'apps.artefact',
+    'apps.incubator',
+    'apps.layar',
+    'apps.POI',
+    'apps.wallet'
 ]
 
 MIDDLEWARE = [
@@ -74,13 +80,6 @@ WSGI_APPLICATION = 'Artefaktor.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
-'''DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}'''
 
 DATABASES = dbsettings
 '''{
