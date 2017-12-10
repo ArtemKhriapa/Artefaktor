@@ -92,18 +92,17 @@ WSGI_APPLICATION = 'Artefaktor.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = dbsettings
-'''{
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': '1',
+        'NAME': 'artefactor',
+        'USER': '',
+        'PASSWORD': '',
         'HOST': '127.0.0.1', # Set to empty string for localhost.
         'PORT': '5432', # Set to empty string for default.
     }
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
