@@ -8,6 +8,7 @@ class OTC(models.Model):
     is_used = models.BooleanField(default = False)
 
     def save(self, *args, **kwargs):
+        '''check for excluding overwriting if is_used changed '''
         if self.is_used == False:
             flag = True
             while flag:
