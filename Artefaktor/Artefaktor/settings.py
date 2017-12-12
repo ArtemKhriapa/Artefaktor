@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
+
     'apps.artefact',
     'apps.incubator',
     'apps.layar',
