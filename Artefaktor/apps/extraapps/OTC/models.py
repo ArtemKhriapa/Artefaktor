@@ -1,24 +1,15 @@
 from django.db import models
-import hashlib as hash
-from datetime import datetime
+import hashlib
 
 class OTC(models.Model):
-
+    datetime = models.DateTimeField(auto_now_add = True)
     otc = models.CharField(max_length = 64, blank = True,  unique = True)
     is_used = models.BooleanField(default = False)
 
-    def save(self, *args, **kwargs):
-        '''check for excluding overwriting if is_used changed '''
-        if self.is_used == False:
-            flag = True
-            while flag:
-                try:
-                    dt = str(datetime.now())
-                    otc = hash.sha256(dt.encode('utf-8'))
-                    self.otc = otc.hexdigest()
-                    super().save(*args, **kwargs)
-                    flag = False
-                except Exception as e:
-                    pass
-        else:
-            super().save(*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.otc = self.calculate(str(self.datetime))
+
+    def calculate(self,salt):
+         res = hashlib.sha256(salt.encode('utf-8'))
+         return res.hexdigest()
