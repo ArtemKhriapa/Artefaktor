@@ -1,5 +1,5 @@
 *.pyc
-Artefaktor/Artefaktor/dbsettings.py
+Artefaktor/db.sqlite3
 Artefaktor/Artefaktor/local_settings.py
 *idea*
 
