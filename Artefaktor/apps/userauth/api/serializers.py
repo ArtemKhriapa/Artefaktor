@@ -1,5 +1,11 @@
-from rest_framework import serializers, generics
+from rest_framework import serializers
+from apps.extraapps.OTC.models import OTC
 
 
-class SomeSerializer(serializers.ModelSerializer):
-    pass
+class OTCSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OTC
+        fields = (
+            'otc', 'is_used'
+        )
