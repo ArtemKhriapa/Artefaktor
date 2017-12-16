@@ -9,14 +9,12 @@ def Registration(request):
     response = "If you see this, then you are in the process of registering"
     return HttpResponse(response)
 
-class RegistrationCheck(generics.RetrieveUpdateDestroyAPIView):
+class RegistrationCheck(generics.RetrieveUpdateAPIView):
     queryset = OTC.objects.all()
     serializer_class = OTCSerializer
 
     def get_object(self):
-        print('wzf')
-        code = get_object_or_404(OTC, otc=self.kwargs.get('otc_check') )
-        #print(code.otc)
+        code = get_object_or_404(OTC, otc=self.kwargs.get('otc_check'))
         return code
 
 def SuccessRegistration(request):

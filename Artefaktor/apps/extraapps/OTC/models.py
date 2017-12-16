@@ -10,10 +10,6 @@ class OTC(models.Model):
          super().__init__(*args, **kwargs)
          self.otc = self.calculate(str(self.datetime))
 
-    # def save(self, *args, **kwargs):
-    #     self.otc = self.calculate(str(self.datetime))
-    #     super().save(self, *args, **kwargs)
-
     def calculate(self,salt):
          res = hashlib.sha256(salt.encode('utf-8'))
          return res.hexdigest()
