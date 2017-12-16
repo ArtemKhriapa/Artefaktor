@@ -122,6 +122,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.live.com'
+EMAIL_HOST_USER = 'yaro93@live.ru'
+EMAIL_HOST_PASSWORD = '123456'#not mine
+EMAIL_PORT = 465
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
