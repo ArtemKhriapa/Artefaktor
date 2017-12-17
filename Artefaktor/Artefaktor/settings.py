@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.layar',
     'apps.POI',
     'apps.wallet',
+    'apps.userauth',
 
     'apps.bonusshop.cart',
     'apps.bonusshop.catalog',
