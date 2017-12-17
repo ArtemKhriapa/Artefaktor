@@ -14,7 +14,15 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
     serializer_class = OTCSerializer
 
     def get_object(self):
+        print('h1')
+        print(self.kwargs.get('otc_check'))
+        print(OTC.objects.all())
+        for o in OTC.objects.all():
+            print(o.otc==self.kwargs.get('otc_check'))
+        print('_'*100)
+        
         code = get_object_or_404(OTC, otc=self.kwargs.get('otc_check'))
+        print('hhh')
         return code
 
 def SuccessRegistration(request):

@@ -8,7 +8,6 @@ class OTC(models.Model):
 
     def __init__(self, *args, **kwargs):
          super().__init__(*args, **kwargs)
-         self.otc = self.calculate(str(self.datetime))
 
     def calculate(self,salt):
          res = hashlib.sha256(salt.encode('utf-8'))
