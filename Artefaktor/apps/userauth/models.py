@@ -13,19 +13,23 @@ class RegistrationForm(models.Model):
 
 class RegistrarionTry(RegistrationForm):
 
-    otc = models.ForeignKey(OTCRegistration, related_name='o_t_c')
-    registrationtext = models.CharField(max_length=200, default="in this plase will be registration form")
+    otc = models.ForeignKey(OTCRegistration, related_name='reg_otc', null=True)
     created_in = models.DateTimeField(auto_now_add= True)
     is_finished = models.BooleanField(default=False)
     finished_in = models.DateTimeField(null = True, blank = True)
 
+    def __str__(self):
+        return "ID: %s, Created: %s, E-mail: %s" % \
+               (self.id, self.created_in, self.user_email)
+
     def try_register(self):
+        # somewhere here create OTC
         # in this place send link (OTC.link) to self.user_email
+        self.save()
         pass
 
     def finishing(self):
         self.is_finished = True
         self.finished_in = timezone.now()
-        #
-        # in this place send email "вы член!"
+        # in this place send email "now you a "член!!!" "
         self.save()

@@ -1,10 +1,9 @@
 from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics
 from django.shortcuts import HttpResponse
-from apps.userauth.api.serializers import OTCSerializer, RegTrySerializer
+from apps.userauth.api.serializers import RegTrySerializer
+from apps.extraapps.OTC.api.serializers  import OTCSerializer
 from apps.userauth.models import RegistrarionTry
-
 from apps.extraapps.OTC.models import OTCRegistration
 
 class RegistrationTry(generics.CreateAPIView):
@@ -21,6 +20,6 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
         return code
 
 def SuccessRegistration(request):
-    response = "If you see this, then your registration completed successfully"
+    response = "If you see this, then your registration completed successfully" # change to generics.API next time
     return HttpResponse(response)
 
