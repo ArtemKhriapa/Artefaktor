@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from apps.extraapps.OTC.models import OTC
+from apps.extraapps.OTC.models import OTCRegistration
 
 
 class OTCSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = OTC
+        model = OTCRegistration
         fields = (
-            'otc', 'is_used'
+            'otc', 'created_in', 'is_used', 'used_in' , 'link'
         )

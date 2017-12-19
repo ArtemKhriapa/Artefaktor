@@ -1,18 +1,29 @@
 from django.db import models
-import hashlib
+from django.contrib.auth.models import User
+from django.utils import timezone
+import uuid
 
-class OTC(models.Model):
-    datetime = models.DateTimeField(auto_now_add = True)
-    otc = models.CharField(max_length = 64, blank = True)
-    is_used = models.BooleanField(default = False)
+class OTCBase(models.Model):
+    '''base OTC model'''
+    otc = models.UUIDField(verbose_name="UUID code", default=uuid.uuid4)
+    created_in = models.DateTimeField(verbose_name="created in", auto_now_add=True)
+    used_in = models.DateTimeField(verbose_name="used in", null = True, blank = True)
+    is_used = models.BooleanField(verbose_name="is used", default = False)
+    link = models.CharField(max_length=256, verbose_name="link", blank = True)
 
-    def __init__(self, *args, **kwargs):
-         super().__init__(*args, **kwargs)
-
-    def calculate(self,salt):
-         res = hashlib.sha256(salt.encode('utf-8'))
-         return res.hexdigest()
+    def apply(self):
+        self.is_used = True
+        self.used_on = timezone.now()
+        self.save()
 
     def __str__(self):
-        return "ID: %s, Time: %s, OTC: %s, Used: %s" % \
-               (self.id, self.datetime, self.otc, self.is_used)
+        return "ID: %s, Time: %s, OTC: %s, Used: %s, Link: %s" % \
+               (self.id, self.created_in, self.otc, self.is_used, self.link)
+
+    def save(self, *args, **kwargs):
+        self.link = 'http://127.0.0.1:8000/registration/' + str(self.otc)
+        super().save(*args, **kwargs)
+
+class OTCRegistration(OTCBase):
+
+    user = models.ForeignKey(User, related_name = 'reg_otc')
