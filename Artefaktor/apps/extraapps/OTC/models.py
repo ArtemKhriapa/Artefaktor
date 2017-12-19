@@ -21,7 +21,7 @@ class OTCBase(models.Model):
 
 class OTCRegistration(OTCBase):
     '''user registration OTC model'''
-    user = models.ForeignKey(User, related_name = 'reg_otc')
+    user = models.ForeignKey(User, related_name = 'reg_otc', null=True, blank=True)
     link = models.CharField(max_length=256, verbose_name="link", blank=True)
 
     def linkgenerate(self):
