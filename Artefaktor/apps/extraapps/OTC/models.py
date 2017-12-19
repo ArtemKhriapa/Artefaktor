@@ -9,7 +9,6 @@ class OTCBase(models.Model):
     created_in = models.DateTimeField(verbose_name="created in", auto_now_add=True)
     used_in = models.DateTimeField(verbose_name="used in", null = True, blank = True)
     is_used = models.BooleanField(verbose_name="is used", default = False)
-    link = models.CharField(max_length=256, verbose_name="link", blank = True)
 
     def apply(self):
         self.is_used = True
@@ -20,10 +19,15 @@ class OTCBase(models.Model):
         return "ID: %s, Time: %s, OTC: %s, Used: %s, Link: %s" % \
                (self.id, self.created_in, self.otc, self.is_used, self.link)
 
-    def save(self, *args, **kwargs):
-        self.link = 'http://127.0.0.1:8000/registration/' + str(self.otc)
-        super().save(*args, **kwargs)
-
 class OTCRegistration(OTCBase):
-
+    '''user registration OTC model'''
     user = models.ForeignKey(User, related_name = 'reg_otc')
+    link = models.CharField(max_length=256, verbose_name="link", blank=True)
+
+    def linkgenerate(self):
+        link = 'http://127.0.0.1:8000/registration/' + str(self.otc)
+        return link
+
+    def save(self, *args, **kwargs):
+        self.link = self.linkgenerate() # only for add in DB. delete it next time
+        super().save(*args, **kwargs)
