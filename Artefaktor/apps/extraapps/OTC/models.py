@@ -19,6 +19,7 @@ class OTCBase(models.Model):
         return "ID: %s, Time: %s, OTC: %s, Used: %s, Link: %s" % \
                (self.id, self.created_in, self.otc, self.is_used, self.link)
 
+
 class OTCRegistration(OTCBase):
     '''user registration OTC model'''
     user = models.ForeignKey(User, related_name = 'reg_otc', null=True, blank=True)

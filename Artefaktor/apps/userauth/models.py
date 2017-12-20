@@ -2,17 +2,14 @@ from django.db import models
 from django.utils import timezone
 from apps.extraapps.OTC.models import OTCRegistration
 
-# Create your models here.
 
-class RegistrationForm(models.Model):
-    '''rough registration form. fix next time'''
-    user_nickname = models.CharField(max_length=100, blank=True, null=True, default = None)
-    user_firstname = models.CharField(max_length=100, blank=True, null=True, default = None)
-    user_lastname = models.CharField(max_length=100, blank=True, null=True, default = None)
-    user_email = models.EmailField(max_length=200, blank=True, null=True, default = None)
+class RegistrarionTry(models.Model):
 
-class RegistrarionTry(RegistrationForm):
-
+    user_nickname = models.CharField(max_length=100, blank=True, null=True)
+    user_firstname = models.CharField(max_length=100, blank=True, null=True)
+    user_lastname = models.CharField(max_length=100, blank=True, null=True)
+    user_email = models.EmailField(max_length=200, blank=True, null=True)
+    extra_data = models.TextField(blank=True, null=True)
     otc = models.ForeignKey(OTCRegistration, related_name='reg_otc', null=True)
     created_in = models.DateTimeField(auto_now_add= True)
     is_finished = models.BooleanField(default=False)
