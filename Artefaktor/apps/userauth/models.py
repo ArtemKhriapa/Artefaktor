@@ -23,7 +23,6 @@ class RegistrarionTry(models.Model):
         # somewhere here create OTC
         # in this place send link (OTC.link) to self.user_email
         self.save()
-        pass
 
     def finishing(self):
         self.is_finished = True

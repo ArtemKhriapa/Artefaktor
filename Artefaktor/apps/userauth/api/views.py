@@ -10,7 +10,12 @@ from apps.extraapps.OTC.models import OTCRegistration
 class RegistrationTry(generics.CreateAPIView):
     queryset = RegistrarionTry.objects.all()
     serializer_class = RegTrySerializer
-
+    
+    def post(self, *args, **kwargs):
+        res = super().post(*args, **kwargs)
+        print('here')
+        # FOO BOO BL
+        return res
 
 class RegistrationCheck(generics.RetrieveUpdateAPIView):
     queryset = OTCRegistration.objects.all()
