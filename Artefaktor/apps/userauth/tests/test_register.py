@@ -30,7 +30,8 @@ class RegisterTest(TestCase):
 
     def test_get_registration_forbidden(self):
         response = self.c.post(
-            '/registration/'
+            '/registration/',
+            data = {'user_email': 'asdasd@c.com'}
         )
         dump(response)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
