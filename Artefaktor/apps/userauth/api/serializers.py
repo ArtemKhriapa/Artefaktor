@@ -1,11 +1,16 @@
 from rest_framework import serializers
-from apps.extraapps.OTC.models import OTC
+from apps.userauth.models import RegistrarionTry
 
 
-class OTCSerializer(serializers.ModelSerializer):
+
+class RegTrySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = OTC
+        model = RegistrarionTry
         fields = (
-            'otc', 'is_used'
+            'user_nickname',
+            'user_firstname',
+            'user_lastname',
+            'user_email',
+            'otc'
         )

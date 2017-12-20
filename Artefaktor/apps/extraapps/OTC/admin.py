@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import OTC
+from .models import OTCRegistration
 
 # Register your models here.
 
-admin.site.register(OTC)
+admin.site.register(OTCRegistration)
