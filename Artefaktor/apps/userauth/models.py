@@ -31,5 +31,6 @@ class RegistrarionTry(RegistrationForm):
     def finishing(self):
         self.is_finished = True
         self.finished_in = timezone.now()
+        # in this place create new user (using inf from this model)
         # in this place send email "now you a "член!!!" "
         self.save()

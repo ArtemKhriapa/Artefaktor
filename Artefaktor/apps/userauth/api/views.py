@@ -19,7 +19,9 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
         code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
         return code
 
-def SuccessRegistration(request):
-    response = "If you see this, then your registration completed successfully" # change to generics.API next time
-    return HttpResponse(response)
+class SuccessRegistration(generics.ListAPIView):
+    queryset = RegistrarionTry.objects.all()
+    serializer_class = RegTrySerializer
+    # response = "If you see this, then your registration completed successfully" # change to generics.API next time
+    # return HttpResponse(response)
 
