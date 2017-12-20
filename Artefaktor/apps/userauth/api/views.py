@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from django.shortcuts import HttpResponse
@@ -16,8 +17,11 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
     serializer_class = OTCSerializer # only for view, change next time
 
     def get_object(self):
-        code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
-        return code
+        try:
+            code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
+            return code
+        except:
+            raise Http404
 
 class SuccessRegistration(generics.ListAPIView):
     queryset = RegistrarionTry.objects.all()
