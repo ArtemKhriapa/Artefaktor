@@ -6,6 +6,7 @@ from apps.userauth.api.serializers import RegTrySerializer
 from apps.extraapps.OTC.api.serializers  import OTCSerializer
 from apps.userauth.models import RegistrarionTry
 from apps.extraapps.OTC.models import OTCRegistration
+from django.contrib.auth.models import User
 
 class RegistrationTry(generics.CreateAPIView):
     queryset = RegistrarionTry.objects.all()

@@ -121,8 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.live.com'
-EMAIL_HOST_USER = 'yaro93@live.ru'
-EMAIL_HOST_PASSWORD = '123456'#not mine
+EMAIL_HOST_USER = 'no_reply_art@outlook.com'
+EMAIL_HOST_PASSWORD = 'Pyaug12345'#should work SMTP mail
 EMAIL_PORT = 465
 
 # Internationalization
