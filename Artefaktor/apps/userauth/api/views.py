@@ -7,15 +7,15 @@ from apps.extraapps.OTC.api.serializers  import OTCSerializer
 from apps.userauth.models import RegistrarionTry
 from apps.extraapps.OTC.models import OTCRegistration
 
+
 class RegistrationTry(generics.CreateAPIView):
     queryset = RegistrarionTry.objects.all()
     serializer_class = RegTrySerializer
     
     def post(self, *args, **kwargs):
         res = super().post(*args, **kwargs)
-        print('here')
-        # FOO BOO BL
         return res
+
 
 class RegistrationCheck(generics.RetrieveUpdateAPIView):
     queryset = OTCRegistration.objects.all()
@@ -27,6 +27,7 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
             return code
         except:
             raise Http404
+
 
 class SuccessRegistration(generics.ListAPIView):
     queryset = RegistrarionTry.objects.all()
