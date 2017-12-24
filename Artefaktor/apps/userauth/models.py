@@ -23,10 +23,20 @@ class RegistrarionTry(models.Model):
         # somewhere here create OTC
         # in this place send link (OTC.link) to self.user_email
         self.save()
-
+ 
     def finishing(self):
         self.is_finished = True
         self.finished_in = timezone.now()
         # in this place create new user (using inf from this model)
-        # in this place send email "now you a "член!!!" "
+        # in this place send email "now you a "dick!!!" "
         self.save()
+        
+    def save(self, *args, **kwargs):
+        print(self.id)
+        if not self.id:
+            # TODO: add otc HERE
+            # 1) otc_obj = create
+            # 2) self.otc = otc_obj
+            pass
+        return super().save(*args, **kwargs)
+
