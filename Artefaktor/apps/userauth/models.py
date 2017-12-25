@@ -1,10 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from apps.extraapps.OTC.models import OTCRegistration
-from django.core.mail import send_mail
-from django.core.mail import EmailMessage
 
-class RegistrationTry(models.Model):
+
+class RegistrarionTry(models.Model):
 
     user_nickname = models.CharField(max_length=100, blank=True, null=True)
     user_firstname = models.CharField(max_length=100, blank=True, null=True)
@@ -21,28 +20,23 @@ class RegistrationTry(models.Model):
                (self.id, self.created_in, self.user_email)
 
     def try_register(self):
-        send_mail(
-            'Your activation link',
-            'Please click on activation link in order to verify your account',
-            'no_reply_art@outlook.com',
-            [self.user_email]
-            fail_silently = False,
-            html_message = <a href="http://127.0.0.1:8000/registration/' + str(self.otc)"></a>
-        )
         # somewhere here create OTC
         # in this place send link (OTC.link) to self.user_email
         self.save()
-
+ 
     def finishing(self):
         self.is_finished = True
         self.finished_in = timezone.now()
         # in this place create new user (using inf from this model)
-        send_mail(
-            'Thank you for refistration',
-            'Thank you for registration in ArtEfactor :)',
-            'no_reply_art@outlook.com',
-            [self.user_email],
-            fail_silently=False,
-        )
-        # in this place send email "now you a "член!!!" "
+        # in this place send email "now you a "dick!!!" "
         self.save()
+        
+    def save(self, *args, **kwargs):
+        print(self.id)
+        if not self.id:
+            # TODO: add otc HERE
+            # 1) otc_obj = create
+            # 2) self.otc = otc_obj
+            pass
+        return super().save(*args, **kwargs)
+

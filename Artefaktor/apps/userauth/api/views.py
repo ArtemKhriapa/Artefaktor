@@ -8,15 +8,11 @@ from apps.userauth.models import RegistrarionTry
 from apps.extraapps.OTC.models import OTCRegistration
 from django.contrib.auth.models import User
 
+
 class RegistrationTry(generics.CreateAPIView):
-    queryset = RegistrarionTry.objects.all()
+    queryset = RegistrarionTry.objects.all()# FIXME: registraTION!
     serializer_class = RegTrySerializer
     
-    def post(self, *args, **kwargs):
-        res = super().post(*args, **kwargs)
-        print('here')
-        # FOO BOO BL
-        return res
 
 class RegistrationCheck(generics.RetrieveUpdateAPIView):
     queryset = OTCRegistration.objects.all()
@@ -28,6 +24,7 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
             return code
         except:
             raise Http404
+
 
 class SuccessRegistration(generics.ListAPIView):
     queryset = RegistrarionTry.objects.all()

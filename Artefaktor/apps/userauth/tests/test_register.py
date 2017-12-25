@@ -12,28 +12,27 @@ class RegisterTest(TestCase):
 
     def setUp(self):
         self.c = APIClient()
-        self.otc = OTCRegistration.objects.create()
+        self.otc = OTCRegistration.objects.create() 
         
     def test_success(self):
         response = self.c.get(
             '/registration/success/'
         )
-        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [])
 
     def test_get_registration_forbidden(self):
+
         response = self.c.get(
             '/registration/'
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_get_registration_forbidden(self):
+    def test_post_registration(self):
         response = self.c.post(
             '/registration/',
             data = {'user_email': 'asdasd@c.com'}
         )
-        dump(response)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
     def test_404_on_bad_OTC(self):
@@ -52,7 +51,7 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['otc'], str(self.otc.otc))
         self.assertEqual(response.data['is_used'], False)
         self.assertEqual(response.data['link'], "http://127.0.0.1:8000/registration/{}".format(self.otc.otc))
-              
+
         self.assertEqual(response.data, {
             'otc': str(self.otc.otc),
             'created_in': response.data['created_in'],
