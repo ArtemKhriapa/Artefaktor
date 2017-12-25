@@ -3,7 +3,7 @@ from django.utils import timezone
 from apps.extraapps.OTC.models import OTCRegistration
 
 
-class RegistrarionTry(models.Model):
+class RegistrationTry(models.Model):
 
     user_nickname = models.CharField(max_length=100, blank=True, null=True)
     user_firstname = models.CharField(max_length=100, blank=True, null=True)

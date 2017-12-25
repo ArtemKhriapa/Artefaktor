@@ -4,13 +4,13 @@ from rest_framework import generics
 from django.shortcuts import HttpResponse
 from apps.userauth.api.serializers import RegTrySerializer
 from apps.extraapps.OTC.api.serializers  import OTCSerializer
-from apps.userauth.models import RegistrarionTry
+from apps.userauth.models import RegistrationTry as RegistrationTryModel
 from apps.extraapps.OTC.models import OTCRegistration
 from django.contrib.auth.models import User
 
 
 class RegistrationTry(generics.CreateAPIView):
-    queryset = RegistrarionTry.objects.all()# FIXME: registraTION!
+    queryset = RegistrationTryModel.objects.all()# FIXME: registraTION!
     serializer_class = RegTrySerializer
     
 
@@ -27,7 +27,7 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
 
 
 class SuccessRegistration(generics.ListAPIView):
-    queryset = RegistrarionTry.objects.all()
+    queryset = RegistrationTryModel.objects.all()
     serializer_class = RegTrySerializer
     # response = "If you see this, then your registration completed successfully" # change to generics.API next time
     # return HttpResponse(response)
