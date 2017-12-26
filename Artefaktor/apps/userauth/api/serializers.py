@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from apps.userauth.models import RegistrarionTry
+from apps.userauth.models import RegistrationTry
 
 
 
 class RegTrySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = RegistrarionTry
+        model = RegistrationTry
         fields = (
             'user_nickname',
             'user_firstname',

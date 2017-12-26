@@ -1,0 +1,6 @@
+{% autoescape off %}
+Hi {{ user.user_nickname }},
+Please click on the link to confirm your registration,
+
+http://{{http://127.0.0.1:8000}}{%/registration/(?P<otc_check>[a-f0-9-]{36})/$%}
+{% endautoescape %}

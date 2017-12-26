@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import RegistrarionTry
+from .models import RegistrationTry
 # Register your models here.
 
-admin.site.register(RegistrarionTry)
+admin.site.register(RegistrationTry)
