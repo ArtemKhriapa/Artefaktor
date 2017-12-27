@@ -27,13 +27,16 @@ class RegistrationTry(models.Model):
         self.is_finished = True
         self.finished_in = timezone.now()
         try:
-            # ? in this place validation fod unique user
-            new_user = User.objects.create_user(str(self.user_nickname), email = self.user_email, password = 'password')
+            # ? in this place validation for unique user
+            new_user = User.objects.create_user(
+                str(self.user_nickname),
+                email = self.user_email,
+                password = 'password'    # create request password next time
+            )
         except Exception as e:
             print(e)
-            #  ? or in this place validation fod unique user
+            #  ? or in this place validation for unique user
 
-        # in this place create new user (using inf from this model)
         # in this place send email "now you a "dick!!!"
         print('reg ok')
         new_user.save()
