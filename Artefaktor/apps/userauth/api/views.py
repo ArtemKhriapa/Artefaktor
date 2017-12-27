@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 
 
 class RegistrationTry(generics.CreateAPIView):
-    queryset = RegistrationTryModel.objects.all()# FIXME: registraTION!
+    queryset = RegistrationTryModel.objects.all()
     serializer_class = RegTrySerializer
 
     def signup(request):
@@ -30,11 +30,13 @@ class RegistrationTry(generics.CreateAPIView):
 
 class RegistrationCheck(generics.RetrieveUpdateAPIView):
     queryset = OTCRegistration.objects.all()
-    serializer_class = OTCSerializer # only for view, change next time
+    serializer_class = OTCSerializer # only for view, change next time ??
 
     def get_object(self):
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
+            registration = RegistrationTryModel.objects.get(otc = code.id)            ## problems
+            registration.finishing()                                                    ## problems
             return code
         except:
             raise Http404
@@ -43,6 +45,5 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
 class SuccessRegistration(generics.ListAPIView):
     queryset = RegistrationTryModel.objects.all()
     serializer_class = RegTrySerializer
-    # response = "If you see this, then your registration completed successfully" # change to generics.API next time
-    # return HttpResponse(response)
+
 
