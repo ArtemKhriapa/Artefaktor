@@ -16,8 +16,8 @@ class OTCBase(models.Model):
         self.save()
 
     def __str__(self):
-        return "ID: %s, Time: %s, OTC: %s, Used: %s, Link: %s" % \
-               (self.id, self.created_in, self.otc, self.is_used, self.link)
+        return "ID: %s, Time: %s, OTC: %s, Used: %s" % \
+               (self.id, self.created_in, self.otc, self.is_used)
 
 
 class OTCRegistration(OTCBase):
