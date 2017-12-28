@@ -22,31 +22,25 @@ class RegistrationTry(models.Model):
         return "ID: %s, Created: %s, E-mail: %s" % \
                (self.id, self.created_in, self.user_email)
 
-    @property
-    def finishing(self):
+    def finish(self):
         self.is_finished = True
         self.finished_in = timezone.now()
-        try:
-            # ? in this place validation for unique user
-            new_user = User.objects.create_user(
-                str(self.user_nickname),
-                email = self.user_email,
-                password = 'password'    # create request password next time
-            )
-        except Exception as e:
-            print(e)
-            #  ? or in this place validation for unique user
+
+        new_user = User.objects.create_user(
+            str(self.user_nickname),
+            email = self.user_email,
+            password = 'password'    # create request password next time
+        )
 
         # in this place send email "now you a "dick!!!"
         print('reg ok')
-        new_user.save()
 
         self.save()
 
     def save(self, *args, **kwargs):
         if not self.id:
-            otc_id = OTCRegistration.objects.create().id
-            new_otc = OTCRegistration.objects.get(id = otc_id)
+            new_otc = OTCRegistration.objects.create()
             self.otc = new_otc
+            
             # somewhere in this place send link (OTC.link) to self.user_email
         return super().save(*args, **kwargs)

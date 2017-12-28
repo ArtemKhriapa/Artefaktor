@@ -14,15 +14,24 @@ class RegisterTest(TestCase):
 
     def setUp(self):
         self.c = APIClient()
-        self.reg_try = OTCRegistration.objects.create()
+        self.reg_try = RegistrationTry.objects.create()
         self.otc = OTCRegistration.objects.create()
-
+        
+        
     def test_success(self):
         response = self.c.get(
             '/registration/success/'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, [])
+        self.assertEqual(response.data, [
+            {
+                'user_nickname': None,
+                'user_firstname': None,
+                'user_lastname': None,
+                'user_email': None,
+                'otc': self.reg_try.otc.id
+            }
+        ])
 
     def test_get_registration_forbidden(self):
 
@@ -67,20 +76,19 @@ class RegisterTest(TestCase):
         
     def test_get_OTC(self):
         response = self.c.get(
-            '/registration/{}/'.format(self.otc.otc)
+            '/registration/{}/'.format(self.reg_try.otc.otc)
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['otc'], str(self.otc.otc))
+        self.assertEqual(response.data['otc'], str(self.reg_try.otc.otc))
         self.assertEqual(response.data['is_used'], False)
-        self.assertEqual(response.data['link'], "http://127.0.0.1:8000/registration/{}".format(self.otc.otc))
+        self.assertEqual(response.data['link'], "http://127.0.0.1:8000/registration/{}".format(self.reg_try.otc.otc))
         self.assertEqual(response.data, {
-            'otc': str(self.otc.otc),
+            'otc': str(self.reg_try.otc.otc),
             'created_in': response.data['created_in'],
             'is_used': False,
             'used_in': None,
-            'link': "http://127.0.0.1:8000/registration/{}".format(self.otc.otc)
-        }
-                         )
+            'link': "http://127.0.0.1:8000/registration/{}".format(self.reg_try.otc.otc)
+        })
 
     
 

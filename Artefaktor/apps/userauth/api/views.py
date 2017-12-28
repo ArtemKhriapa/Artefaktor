@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from rest_framework import generics
+from rest_framework import generics, status
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from apps.userauth.api.serializers import RegTrySerializer
@@ -16,16 +16,19 @@ class RegistrationTry(generics.CreateAPIView):
     queryset = RegistrationTryModel.objects.all()
     serializer_class = RegTrySerializer
 
-    def signup(request):
-        if request.method == 'POST':
-            forms = RegistrationTryModel(forms.Form)
-            if forms.is_valid():
-                User.save()
+    def post(self, *args, **kwargs):
+        res = super().post(*args, **kwargs)
+        if res.status_code == status.HTTP_201_CREATED:
+            print('here')
+            '''
+            TODO: Move to signal trough mailer app
             send_mail(
                 'Please verify your account',
                 message = render_to_string('Templates.html', {'foo': 'bar'}),
                 to = User.user_email
             )
+            '''
+        return res
 
 
 class RegistrationCheck(generics.RetrieveUpdateAPIView):
@@ -35,10 +38,13 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
     def get_object(self):
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
-            registration = RegistrationTryModel.objects.get(otc = code.id)            ## problems
-            registration.finishing()                                                    ## problems
+            # FIXME: check unused registration
+            
+            registration = RegistrationTryModel.objects.get(otc = code)            ## problems
+            registration.finishing()                                           ## problems
             return code
-        except:
+        except Exception as e:
+            #raise e # NOTICE: this is how we debug except blocks
             raise Http404
 
 
