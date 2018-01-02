@@ -34,7 +34,7 @@ class RegisterTest(TestCase):
                 'user_firstname': None,
                 'user_lastname': None,
                 'user_email': None,
-                'otc': str(self.reg_try.otc.id)
+                'otc': int(self.reg_try.otc.id)
             }
         ])
 
