@@ -10,16 +10,16 @@ class RegTrySerializer(serializers.ModelSerializer):
         max_length=100,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    # RegistrationTry.user_email = serializers.CharField(
-    #     max_length=100,
-    #     validators=[UniqueValidator(queryset=User.objects.all())]
-    # )
+    email = serializers.CharField(
+        max_length=100,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     class Meta:
         model = RegistrationTry
         fields = (
             'username',
             'user_firstname',
             'user_lastname',
-            'user_email',
+            'email',
             'otc'
         )
