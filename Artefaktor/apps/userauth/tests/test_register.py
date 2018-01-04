@@ -24,8 +24,6 @@ class RegisterTest(TestCase):
             '/registration/success/'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(dump(response))
-        print('HERE----->>  ',str(self.reg_try.otc.id))
 
         # is all this data need in here ?
         self.assertEqual(response.data, [
@@ -66,8 +64,14 @@ class RegisterTest(TestCase):
                 'user_email' : 'enother_test_email@test.test'
             }
         )
-        # email
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {
+            'username': [
+                'This field must be unique.'
+            ]
+        })
+        # email
         response = self.c.post(
             '/registration/',
             data = {
@@ -77,8 +81,13 @@ class RegisterTest(TestCase):
                 'user_email' : self.user.email
             }
         )
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {
+            'user_email': [
+                'This field must be unique.'
+            ]
+        })
 
     def test_validation_responce_data_registration(self):
         response = self.c.post(
