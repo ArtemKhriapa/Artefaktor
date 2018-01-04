@@ -6,7 +6,7 @@ from rest_framework import status
 
 from apps.userauth.models import RegistrationTry
 from apps.extraapps.OTC.models import OTCRegistration
-from utils.helpers_for_tests import dump
+from utils.helpers_for_tests import dump, create_user
 import time
 
 
@@ -15,21 +15,26 @@ class RegisterTest(TestCase):
     def setUp(self):
         self.c = APIClient()
         self.reg_try = RegistrationTry.objects.create()
-        self.otc = OTCRegistration.objects.create()
-        
-        
+        #self.otc = OTCRegistration.objects.create()
+        # self.reg_try.otc.id = self.otc.id
+        self.user = create_user('SomeTestUser')
+
     def test_success(self):
         response = self.c.get(
             '/registration/success/'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print(dump(response))
+        print('HERE----->>  ',str(self.reg_try.otc.id))
+
+        # is all this data need in here ?
         self.assertEqual(response.data, [
             {
-                'user_nickname': None,
+                'username': None,
                 'user_firstname': None,
                 'user_lastname': None,
                 'user_email': None,
-                'otc': self.reg_try.otc.id
+                'otc': int(self.reg_try.otc.id)
             }
         ])
 
@@ -40,30 +45,53 @@ class RegisterTest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_post_registration(self):
+    def test_post_registration_with_validation_unique(self):
         response = self.c.post(
             '/registration/',
             data = {
-                'user_nickname' : 'test_user',
+                'username' : 'test_user',
                 'user_firstname' : 'user_first_name',
                 'user_lastname' : 'user_second_name',
                 'user_email' : 'test_email@test.test'
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        # username
+        response = self.c.post(
+            '/registration/',
+            data = {
+                'username' : self.user.username,
+                'user_firstname' : 'user_first_name',
+                'user_lastname' : 'user_second_name',
+                'user_email' : 'enother_test_email@test.test'
+            }
+        )
+        # email
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.c.post(
+            '/registration/',
+            data = {
+                'username' : 'enother_test_user',
+                'user_firstname' : 'user_first_name',
+                'user_lastname' : 'user_second_name',
+                'user_email' : self.user.email
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_validation_responce_data_registration(self): #my first test, pls d'nt put me down :))
+
+    def test_validation_responce_data_registration(self):
         response = self.c.post(
             '/registration/',
             data={
-                'user_nickname': 'test_user',
+                'username': 'test_user',
                 'user_firstname': 'user_first_name',
                 'user_lastname': 'user_second_name',
                 'user_email': 'test_email@test.test'
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['user_nickname'], 'test_user')
+        self.assertEqual(response.data['username'], 'test_user')
         self.assertEqual(response.data['user_firstname'], 'user_first_name')
         self.assertEqual(response.data['user_lastname'], 'user_second_name')
         self.assertEqual(response.data['user_email'], 'test_email@test.test')
@@ -90,5 +118,12 @@ class RegisterTest(TestCase):
             'link': "http://127.0.0.1:8000/registration/{}".format(self.reg_try.otc.otc)
         })
 
-    
+    def test_get_used_OTC(self):
+        self.reg_try.otc.apply()
+        response = self.c.get(
+            '/registration/{}/'.format(self.reg_try.otc.otc)
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
 
