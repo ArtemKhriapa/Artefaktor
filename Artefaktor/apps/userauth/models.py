@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class RegistrationTry(models.Model):
 
-    user_id = models.ForeignKey(User, related_name='registration',null=True, blank = True)
+    user = models.ForeignKey(User, related_name='registration',null=True, blank = True)
     username = models.CharField(max_length=100,  blank=True, null=True)
     user_firstname = models.CharField(max_length=100, blank=True, null=True)
     user_lastname = models.CharField(max_length=100, blank=True, null=True)
@@ -26,13 +26,13 @@ class RegistrationTry(models.Model):
         self.is_finished = True
         self.finished_in = timezone.now()
         self.otc.apply() #cracking otc
-
+        print(self.username)
         new_user = User.objects.create_user(
-            str(self.username),
+            username=self.username,
             email = self.email,
-            password = 'password'    # create request password next time
+            password = ''    # create request password next time
         )
-
+        self.user = new_user
         # in this place send email "now you a "dick!!!"
         self.save()
 

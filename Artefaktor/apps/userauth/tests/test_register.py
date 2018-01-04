@@ -14,7 +14,9 @@ class RegisterTest(TestCase):
 
     def setUp(self):
         self.c = APIClient()
-        self.reg_try = RegistrationTry.objects.create()
+        self.reg_try = RegistrationTry.objects.create(
+            username='test123'
+        )
         #self.otc = OTCRegistration.objects.create()
         # self.reg_try.otc.id = self.otc.id
         self.user = create_user('SomeTestUser')
@@ -84,7 +86,7 @@ class RegisterTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, {
-            'user_email': [
+            'email': [
                 'This field must be unique.'
             ]
         })

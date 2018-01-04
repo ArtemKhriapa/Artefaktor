@@ -49,7 +49,7 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
                 raise Http404
         except Exception as e:
             #print (str(e))
-            #raise e # NOTICE: this is how we debug except blocks
+            raise e # NOTICE: this is how we debug except blocks
             raise Http404
 
 
