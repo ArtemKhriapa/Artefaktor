@@ -41,13 +41,14 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
             # FIXME: check unused registration
-            if code.is_used != True:
-                registration = RegistrationTryModel.objects.get(otc = code)            ## problems
-                registration.finish()                                           ## problems
+            if code.is_used == False:
+                registration = RegistrationTryModel.objects.get(otc = code)
+                registration.finish()
                 return code
-            else: raise Http404
+            else:
+                raise Http404
         except Exception as e:
-            print ('here ___----->>>> ', str(e))
+            #print (str(e))
             #raise e # NOTICE: this is how we debug except blocks
             raise Http404
 

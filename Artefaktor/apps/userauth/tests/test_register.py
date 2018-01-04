@@ -31,7 +31,7 @@ class RegisterTest(TestCase):
                 'username': None,
                 'user_firstname': None,
                 'user_lastname': None,
-                'user_email': None,
+                'email': None,
                 'otc': int(self.reg_try.otc.id)
             }
         ])
@@ -50,7 +50,7 @@ class RegisterTest(TestCase):
                 'username' : 'test_user',
                 'user_firstname' : 'user_first_name',
                 'user_lastname' : 'user_second_name',
-                'user_email' : 'test_email@test.test'
+                'email' : 'test_email@test.test'
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -61,7 +61,7 @@ class RegisterTest(TestCase):
                 'username' : self.user.username,
                 'user_firstname' : 'user_first_name',
                 'user_lastname' : 'user_second_name',
-                'user_email' : 'enother_test_email@test.test'
+                'email' : 'enother_test_email@test.test'
             }
         )
 
@@ -78,7 +78,7 @@ class RegisterTest(TestCase):
                 'username' : 'enother_test_user',
                 'user_firstname' : 'user_first_name',
                 'user_lastname' : 'user_second_name',
-                'user_email' : self.user.email
+                'email' : self.user.email
             }
         )
 
@@ -96,14 +96,14 @@ class RegisterTest(TestCase):
                 'username': 'test_user',
                 'user_firstname': 'user_first_name',
                 'user_lastname': 'user_second_name',
-                'user_email': 'test_email@test.test'
+                'email': 'test_email@test.test'
             }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['username'], 'test_user')
         self.assertEqual(response.data['user_firstname'], 'user_first_name')
         self.assertEqual(response.data['user_lastname'], 'user_second_name')
-        self.assertEqual(response.data['user_email'], 'test_email@test.test')
+        self.assertEqual(response.data['email'], 'test_email@test.test')
 
     def test_404_on_bad_OTC(self):
         response = self.c.get(
@@ -115,6 +115,8 @@ class RegisterTest(TestCase):
         response = self.c.get(
             '/registration/{}/'.format(self.reg_try.otc.otc)
         )
+        print(self.reg_try.otc.otc)
+        print (dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['otc'], str(self.reg_try.otc.otc))
         self.assertEqual(response.data['is_used'], False)

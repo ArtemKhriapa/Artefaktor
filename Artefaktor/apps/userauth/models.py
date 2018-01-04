@@ -11,7 +11,7 @@ class RegistrationTry(models.Model):
     username = models.CharField(max_length=100,  blank=True, null=True)
     user_firstname = models.CharField(max_length=100, blank=True, null=True)
     user_lastname = models.CharField(max_length=100, blank=True, null=True)
-    user_email = models.EmailField(max_length=200,  blank=True, null=True)
+    email = models.EmailField(max_length=200,  blank=True, null=True)
     extra_data = models.TextField(blank=True, null=True)
     otc = models.ForeignKey(OTCRegistration, related_name='reg_otc', null=True, blank = True)
     created_in = models.DateTimeField(auto_now_add= True)
@@ -20,7 +20,7 @@ class RegistrationTry(models.Model):
 
     def __str__(self):
         return "ID: %s, Created: %s, E-mail: %s" % \
-               (self.id, self.created_in, self.user_email)
+               (self.id, self.created_in, self.email)
 
     def finish(self):
         self.is_finished = True
@@ -29,7 +29,7 @@ class RegistrationTry(models.Model):
 
         new_user = User.objects.create_user(
             str(self.username),
-            email = self.user_email,
+            email = self.email,
             password = 'password'    # create request password next time
         )
 
