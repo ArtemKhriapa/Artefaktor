@@ -22,14 +22,6 @@ class RegistrationTry(generics.CreateAPIView):
         if res.status_code == status.HTTP_201_CREATED:
             #print('here')
             pass
-            '''
-            TODO: Move to signal trough mailer app
-            send_mail(
-                'Please verify your account',
-                message = render_to_string('Templates.html', {'foo': 'bar'}),
-                to = User.user_email
-            )
-            '''
         return res
 
 
