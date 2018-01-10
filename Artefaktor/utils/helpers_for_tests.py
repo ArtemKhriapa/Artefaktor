@@ -14,7 +14,7 @@ def create_user(username, user_kwargs_dict=None, profile_kwargs_dict=None):
     user_kw = dict(
         username=username,
         password='111',
-        email=username + '.com'
+        email=username + '@somemailservice.com'
     )
     user_kw.update(user_kwargs_dict)
     user_kw['password'] = make_password(user_kw['password'])

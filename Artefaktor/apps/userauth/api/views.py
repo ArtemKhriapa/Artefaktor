@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from apps.userauth.api.serializers import RegTrySerializer
+from apps.userauth.api.serializers import RegTrySerializer, SetPassSerialazer
 from apps.extraapps.OTC.api.serializers  import OTCSerializer
 from apps.userauth.models import RegistrationTry as RegistrationTryModel
 from apps.extraapps.OTC.models import OTCRegistration
@@ -20,7 +20,6 @@ class RegistrationTry(generics.CreateAPIView):
     def post(self, *args, **kwargs):
         res = super().post(*args, **kwargs)
         if res.status_code == status.HTTP_201_CREATED:
-            #print('here')
             pass
             '''
             TODO: Move to signal trough mailer app
@@ -40,21 +39,37 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
     def get_object(self):
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
-            # FIXME: check unused registration
-            if code.is_used == False:
-                registration = RegistrationTryModel.objects.get(otc = code)
-                registration.finish()
+            if not code.is_used :
                 return code
             else:
                 raise Http404
         except Exception as e:
-            #print (str(e))
             raise e # NOTICE: this is how we debug except blocks
             raise Http404
 
 
-class SuccessRegistration(generics.ListAPIView):
+class SuccessRegistration(generics.ListCreateAPIView):
     queryset = RegistrationTryModel.objects.all()
     serializer_class = RegTrySerializer
+
+
+class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
+    queryset = RegistrationTryModel.objects.all()
+    serializer_class = SetPassSerialazer
+
+    def get_object(self):
+        try:
+            code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
+            if not code.is_used :
+                registration = RegistrationTryModel.objects.get(otc=code.id)
+                print(registration.otc)
+                #registration.finish()
+                return registration
+            else:
+                raise Http404
+        except Exception as e:
+            print('---->', e)  # NOTICE: this is how we debug except blocks
+            raise Http404
+
 
 

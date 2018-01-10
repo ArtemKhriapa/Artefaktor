@@ -25,12 +25,11 @@ class RegisterTest(TestCase):
         response = self.c.get(
             '/registration/success/'
         )
+        #print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        # is all this data need in here ?
         self.assertEqual(response.data, [
             {
-                'username': None,
+                'username': self.reg_try.username,
                 'user_firstname': None,
                 'user_lastname': None,
                 'email': None,
@@ -117,8 +116,8 @@ class RegisterTest(TestCase):
         response = self.c.get(
             '/registration/{}/'.format(self.reg_try.otc.otc)
         )
-        print(self.reg_try.otc.otc)
-        print (dump(response))
+        # print(self.reg_try.otc.otc)
+        # print (dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['otc'], str(self.reg_try.otc.otc))
         self.assertEqual(response.data['is_used'], False)
