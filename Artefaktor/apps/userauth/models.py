@@ -25,20 +25,13 @@ class RegistrationTry(models.Model):
     def finish(self):
         self.is_finished = True
         self.finished_in = timezone.now()
-        self.otc.apply() #cracking otc
-        # new_user = User.objects.create_user(
-        #     username=self.username,
-        #     email = self.email,
-            #password = ''    # create request password next time
-        # )
-        # self.user = new_user
-        # in this place send email "now you a "dick!!!"
+        self.otc.apply()
+        self.otc.used_in = timezone.now()
         self.save()
 
     def save(self, *args, **kwargs):
         if not self.id:
             new_otc = OTCRegistration.objects.create()
             self.otc = new_otc
-            
             # somewhere in this place send link (OTC.link) to self.user_email
         return super().save(*args, **kwargs)

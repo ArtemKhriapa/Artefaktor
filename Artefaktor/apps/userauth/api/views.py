@@ -37,6 +37,7 @@ class RegistrationCheck(generics.RetrieveUpdateAPIView):
     serializer_class = OTCSerializer
 
     def get_object(self):
+        #cheking OTC
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
             if not code.is_used :
@@ -57,12 +58,14 @@ class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
     queryset = RegistrationTryModel.objects.all()
     serializer_class = SetPassSerialazer
 
+
     def get_object(self):
+        #cheking OTC, cheking RegistrationTry
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
             if not code.is_used :
+                # geting RegistrationTry by OTC
                 registration = RegistrationTryModel.objects.get(otc=code.id)
-                print(registration.otc)
                 #registration.finish()
                 return registration
             else:
@@ -71,5 +74,16 @@ class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
             print('---->', e)  # NOTICE: this is how we debug except blocks
             raise Http404
 
+    def get_serializer(self, *args, **kwargs):
+        #i d'nt now what is this((
+        # maybe including 'context' in default serializer
+        serializer_class = self.get_serializer_class()
+        kwargs['context'] = self.get_serializer_context()
+        return serializer_class(*args, **kwargs)
 
-
+    def get_serializer_context(self):
+        return {
+            #adding extra content in 'context'->>  RegTry from get_object
+            'username': self.get_object().username,
+            'email':self.get_object().email
+        }

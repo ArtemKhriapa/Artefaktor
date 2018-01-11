@@ -31,9 +31,9 @@ class SetPassSerialazer(serializers.ModelSerializer):
 
     class Meta:
             model = RegistrationTry
-            fields = (
-                'username',
-                'email',
+            fields =(
+                #'username',
+                #'email',
                 'password',
                 'confirm_password'
             )
@@ -41,13 +41,15 @@ class SetPassSerialazer(serializers.ModelSerializer):
     def validate(self, data):
         if not data.get('password') or not data.get('confirm_password'):
             raise serializers.ValidationError("Please enter a password and confirm password.")
-        if data.get('password') != data.get('confirm_password'):
+        # password => may need to include letters and digits ???
+        if len(data.get('password')) < 4 or len(data.get('confirm_password')) < 4:
+            raise serializers.ValidationError("Password must be 4 or more characters.")
+        if data.get('password') != data.get('confirm_password') :
             raise serializers.ValidationError("Those passwords don't match.")
         return data
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'])
-        #user.set_password(validated_data['password'])
+        user = User.objects.create_user(self.context['username'], self.context['email'], validated_data['password'])
         user.save()
-        print(user.username, '--', user.email)
+        print('user ',user.username, ' was created , ', user.email) #debug
         return user
