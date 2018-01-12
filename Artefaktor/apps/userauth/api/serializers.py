@@ -49,7 +49,12 @@ class SetPassSerialazer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
+        # POST creating User with extra data from 'context'
         user = User.objects.create_user(self.context['username'], self.context['email'], validated_data['password'])
         user.save()
-        print('user ',user.username, ' was created , ', user.email) #debug
+        registration = RegistrationTry.objects.get(username = user.username)
+        registration.user = user
+        registration.finish()       #utilization RegistrationTry
+
+
         return user

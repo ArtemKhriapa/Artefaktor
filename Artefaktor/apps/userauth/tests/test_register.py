@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from rest_framework.test import APIClient
 from rest_framework import status
-
+from django.contrib.auth.models import User
 from apps.userauth.models import RegistrationTry
 from apps.extraapps.OTC.models import OTCRegistration
 from utils.helpers_for_tests import dump, create_user
@@ -15,24 +15,22 @@ class RegisterTest(TestCase):
     def setUp(self):
         self.c = APIClient()
         self.reg_try = RegistrationTry.objects.create(
-            username='test123'
+            username ='test123',
+            email = 'someemail@mail.com'
         )
-        #self.otc = OTCRegistration.objects.create()
-        # self.reg_try.otc.id = self.otc.id
         self.user = create_user('SomeTestUser')
 
     def test_success(self):
         response = self.c.get(
             '/registration/success/'
         )
-        #print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [
             {
                 'username': self.reg_try.username,
                 'user_firstname': None,
                 'user_lastname': None,
-                'email': None,
+                'email':self.reg_try.email,
                 'otc': int(self.reg_try.otc.id)
             }
         ])
@@ -138,4 +136,74 @@ class RegisterTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
+    def test_cheking_URL_entering_password_for_registration(self):
+        # cheking URL
+        response = self.c.get(
+            '/registration/{}/set_password/'.format(self.reg_try.otc.otc)
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_entering_unfit_password_for_registration(self):
+        # POST unfit password
+        response = self.c.post(
+            '/registration/{}/set_password/'.format(self.reg_try.otc.otc),
+                data={
+                    'password': '123456',
+                    'confirm_password': '12345'
+                }
+            )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {
+                'non_field_errors': [
+                    "Those passwords don't match."
+                ]
+            })
+
+    def test_entering_short_password_for_registration(self):
+        # POST short password
+        response = self.c.post(
+            '/registration/{}/set_password/'.format(self.reg_try.otc.otc),
+            data={
+                'password': '123',
+                'confirm_password': '12345'
+                }
+            )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {
+                'non_field_errors': [
+                    "Password must be 4 or more characters."
+                ]
+            })
+    def test_entering_normal_for_registration_and_checking_user(self):
+        # POST fit password
+        response = self.c.post(
+            '/registration/{}/set_password/'.format(self.reg_try.otc.otc),
+            data={
+                'password': '123456',
+                'confirm_password': '123456'
+                }
+            )
+        testuser = User.objects.get(username=self.reg_try.username)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(testuser.username, self.reg_try.username)
+        self.assertEqual(testuser.email, self.reg_try.email)
+
+    def test_full_registration_and_checking_user(self):
+        # new registration try and fit password
+        test_reg_try = RegistrationTry.objects.create(
+                username ='Monty',
+                email = 'Python@mail.com'
+            )
+        #print(test_reg_try.is_finished)
+        response = self.c.post(
+            '/registration/{}/set_password/'.format(test_reg_try.otc.otc),
+                data={
+                    'password': '654321',
+                    'confirm_password': '654321'
+                }
+            )
+        #print(test_reg_try.otc.is_used) #????
+        testuser = User.objects.get(username=test_reg_try.username)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(testuser.username, test_reg_try.username)
+        self.assertEqual(testuser.email, test_reg_try.email)

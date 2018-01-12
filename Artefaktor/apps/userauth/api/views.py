@@ -66,11 +66,11 @@ class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
             if not code.is_used :
                 # geting RegistrationTry by OTC
                 registration = RegistrationTryModel.objects.get(otc=code.id)
-                #registration.finish()
                 return registration
             else:
                 raise Http404
         except Exception as e:
+            #raise e
             print('---->', e)  # NOTICE: this is how we debug except blocks
             raise Http404
 

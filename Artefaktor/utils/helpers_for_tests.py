@@ -13,7 +13,7 @@ def create_user(username, user_kwargs_dict=None, profile_kwargs_dict=None):
 
     user_kw = dict(
         username=username,
-        password='111',
+        password='1111',
         email=username + '@somemailservice.com'
     )
     user_kw.update(user_kwargs_dict)

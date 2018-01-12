@@ -23,9 +23,9 @@ class RegistrationTry(models.Model):
                (self.id, self.created_in, self.email)
 
     def finish(self):
-        self.is_finished = True
+        self.is_finished = True     #utilization
         self.finished_in = timezone.now()
-        self.otc.apply()
+        self.otc.apply()            #utilization
         self.otc.used_in = timezone.now()
         self.save()
 
