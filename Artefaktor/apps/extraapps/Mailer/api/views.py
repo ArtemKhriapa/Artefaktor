@@ -6,7 +6,7 @@ from django.template.loader import get_template, render_to_string
 from django.contrib.auth import User
 
 
-@receiver(post_save,sender=RegistrationTry)
+@receiver(post_save, sender=RegistrationTry)
 def mail_notification(sender, **kwargs):
     get_template('Templates/OTC_Check_Template.html')
     send_mail(
