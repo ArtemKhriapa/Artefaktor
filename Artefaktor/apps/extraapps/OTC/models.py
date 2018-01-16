@@ -12,7 +12,7 @@ class OTCBase(models.Model):
 
     def apply(self):
         self.is_used = True         #utilization
-        self.used_on = timezone.now()
+        self.used_in = timezone.now()
         self.save()
 
     def __str__(self):

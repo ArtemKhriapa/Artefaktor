@@ -184,6 +184,7 @@ class RegisterTest(TestCase):
                 }
             )
         testuser = User.objects.get(username=self.reg_try.username)
+        
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(testuser.username, self.reg_try.username)
         self.assertEqual(testuser.email, self.reg_try.email)
@@ -202,8 +203,10 @@ class RegisterTest(TestCase):
                     'confirm_password': '654321'
                 }
             )
-        #print(test_reg_try.otc.is_used) #????
         testuser = User.objects.get(username=test_reg_try.username)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(testuser.username, test_reg_try.username)
         self.assertEqual(testuser.email, test_reg_try.email)
+        self.assertEqual(testuser.registration.is_finished, True)
+        self.assertEqual(testuser.registration.otc.is_used, True)

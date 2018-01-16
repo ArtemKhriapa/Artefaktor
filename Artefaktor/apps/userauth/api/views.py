@@ -63,15 +63,17 @@ class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
         #cheking OTC, cheking RegistrationTry
         try:
             code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
+            registration = RegistrationTryModel.objects.get(otc=code.id)  # geting RegistrationTry by OTC
             if not code.is_used :
-                # geting RegistrationTry by OTC
-                registration = RegistrationTryModel.objects.get(otc=code.id)
+                return registration
+            elif registration.is_finished:
                 return registration
             else:
+                print('404 in code.is_used')
                 raise Http404
         except Exception as e:
             #raise e
-            print('---->', e)  # NOTICE: this is how we debug except blocks
+            print('404 in get_object ---->', e)  # NOTICE: this is how we debug except blocks
             raise Http404
 
     def get_serializer(self, *args, **kwargs):

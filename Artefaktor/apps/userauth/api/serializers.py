@@ -56,5 +56,4 @@ class SetPassSerialazer(serializers.ModelSerializer):
         registration.user = user
         registration.finish()       #utilization RegistrationTry
 
-
         return user

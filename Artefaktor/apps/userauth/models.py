@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 class RegistrationTry(models.Model):
 
-    user = models.ForeignKey(User, related_name='registration',null=True, blank = True)
+    user = models.OneToOneField(User, related_name='registration',null=True, blank = True)
     username = models.CharField(max_length=100,  blank=True, null=True)
     user_firstname = models.CharField(max_length=100, blank=True, null=True)
     user_lastname = models.CharField(max_length=100, blank=True, null=True)
@@ -26,7 +26,6 @@ class RegistrationTry(models.Model):
         self.is_finished = True     #utilization
         self.finished_in = timezone.now()
         self.otc.apply()            #utilization
-        self.otc.used_in = timezone.now()
         self.save()
 
     def save(self, *args, **kwargs):
