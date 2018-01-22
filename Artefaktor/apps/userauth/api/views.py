@@ -1,6 +1,7 @@
 from django.http import Http404
 from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
@@ -81,3 +82,9 @@ class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
             'username': self.get_object().username,
             'email':self.get_object().email
         }
+
+@login_required
+def HomeView(request):
+    #response = "Welcome home!"
+    return render(request, 'home.html')
+    #return HttpResponse(response)
