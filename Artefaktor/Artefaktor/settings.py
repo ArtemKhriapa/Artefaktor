@@ -24,7 +24,9 @@ SECRET_KEY = 'h$mk)4w^&4g!g5_t(gs)cza)nm-s!koyi&0mr+^5hp__+1dx&@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'artefaktor.com'
+]
 
 
 # Application definition
@@ -96,6 +98,12 @@ AUTHENTICATION_BACKENDS = (
 
     'django.contrib.auth.backends.ModelBackend',
 
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.yahoo.YahooOpenId',
     'social_core.backends.facebook.FacebookOAuth2',
 )
 
@@ -165,3 +173,6 @@ LOGIN_REDIRECT_URL = 'home'
 #keys for FB
 SOCIAL_AUTH_FACEBOOK_KEY = '1482602135170781'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '161ef8555417b340fff785894ab6e08d'  # App Secret
+
+SOCIAL_AUTH_GOOGE_KEY = '657928198709-fho4mgmevjdk2biojckgvtfe5m75mf5q.apps.googleusercontent.com'  # App ID
+SOCIAL_AUTH_GOOGE_SECRET = '5WVe9SuY_hbzRJdocmmr8zH2'  # App Secret
