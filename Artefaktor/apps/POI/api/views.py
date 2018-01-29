@@ -1,22 +1,17 @@
 from django.http import Http404
 from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.shortcuts import HttpResponse
-from django.contrib.auth.models import User
-from apps.userauth.api.serializers import RegTrySerializer, SetPassSerialazer
-from apps.extraapps.OTC.api.serializers  import OTCSerializer
-from apps.userauth.models import RegistrationTry as RegistrationTryModel
-from apps.extraapps.OTC.models import OTCRegistration
-
+from apps.POI.api.serializers  import POISerializer
+from apps.POI.models import POI as POI_model
 from django import forms
 from django.core.mail import send_mail
 
 
-class RegistrationTry(generics.CreateAPIView):
-    queryset = RegistrationTryModel.objects.all()
-    serializer_class = RegTrySerializer
+class POI(generics.CreateAPIView, generics.RetrieveAPIView):
+    queryset = POI_model.objects.all()
+    serializer_class = POISerializer
 
     def post(self, *args, **kwargs):
         res = super().post(*args, **kwargs)
@@ -24,25 +19,15 @@ class RegistrationTry(generics.CreateAPIView):
             pass
         return res
 
-
-class RegistrationCheck(generics.RetrieveUpdateAPIView):
-    queryset = OTCRegistration.objects.all()
-    serializer_class = OTCSerializer
-
     def get_object(self):
-        #cheking OTC
         try:
-            code = get_object_or_404(OTCRegistration, otc=self.kwargs.get('otc_check'))
-            if not code.is_used :
-                return code
-            else:
-                raise Http404
+            poi = get_object_or_404(POI_model, id=self.kwargs.get('POI_id'))
+            return poi
         except Exception as e:
-            raise e # NOTICE: this is how we debug except blocks
+            print(e)
             raise Http404
 
-
-class SuccessRegistration(generics.ListCreateAPIView):
+'''class SuccessRegistration(generics.ListCreateAPIView):
     queryset = RegistrationTryModel.objects.all()
     serializer_class = RegTrySerializer
 
@@ -87,4 +72,4 @@ class SetPass(generics.RetrieveAPIView,generics.CreateAPIView ):
 def HomeView(request):
     #response = "Welcome home!"
     return render(request, 'home.html')
-    #return HttpResponse(response)
+    #return HttpResponse(response)'''

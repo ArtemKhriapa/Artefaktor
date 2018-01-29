@@ -24,10 +24,6 @@ SECRET_KEY = 'h$mk)4w^&4g!g5_t(gs)cza)nm-s!koyi&0mr+^5hp__+1dx&@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'artefaktor.com'
-]
-
 
 # Application definition
 
