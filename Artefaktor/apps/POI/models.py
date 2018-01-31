@@ -13,4 +13,9 @@ class POI(models.Model):
 
 class GisPOI(modelsgis.Model): #experiment withs GIS
 
-    point = modelsgis.PointField(null = True, blank=True)
+    geometry = modelsgis.GeometryField(null = True, blank=True)
+    point = modelsgis.PointField(null=True, blank=True)
+    polygon = modelsgis.PolygonField(null=True, blank=True)
+
+    def __str__(self):
+        return "ID: %s" % (self.id)
