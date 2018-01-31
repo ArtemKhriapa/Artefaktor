@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'social_django',
+    'django.contrib.gis',
 
     'apps.artefact',
     'apps.incubator',
@@ -165,6 +166,11 @@ LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
 LOGIN_REDIRECT_URL = 'home'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS':
+        ('django_filters.rest_framework.DjangoFilterBackend',)
+}
 
 #keys for FB
 SOCIAL_AUTH_FACEBOOK_KEY = '1482602135170781'  # App ID

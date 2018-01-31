@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.gis.db import models as modelsgis
 
 class POI(models.Model):
 
@@ -10,3 +11,6 @@ class POI(models.Model):
     create_in = models.DateTimeField(auto_now_add= True)
     created_was = models.ForeignKey(User, null=True, blank=True)
 
+class GisPOI(modelsgis.Model): #experiment withs GIS
+
+    point = modelsgis.PointField(null = True, blank=True)
