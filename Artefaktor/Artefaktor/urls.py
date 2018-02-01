@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from apps.userauth.api.views import HomeView
 
 urlpatterns = [
+    url(r'^$', HomeView, name='home'), #temporary plug
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^admin/', admin.site.urls),
     url(r'^registration/', include('apps.userauth.api.urls')),
-
+    url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
+    url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
+    url(r'^POI/', include('apps.POI.api.urls')),
 ]

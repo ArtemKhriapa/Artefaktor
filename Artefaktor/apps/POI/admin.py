@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import  GisPOI # ,POI
 
-# Register your models here.
+# admin.site.register(POI)
+admin.site.register(GisPOI)

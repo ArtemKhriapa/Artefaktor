@@ -11,8 +11,8 @@ class OTCBase(models.Model):
     is_used = models.BooleanField(verbose_name="is used", default = False)
 
     def apply(self):
-        self.is_used = True
-        self.used_on = timezone.now()
+        self.is_used = True         #utilization
+        self.used_in = timezone.now()
         self.save()
 
     def __str__(self):

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+  <h2>Wellcome! Who are you?</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+  </form>
+  <br>
+  <p><strong>-- OR --</strong></p>
+  <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook (still useless)</a>
+  <br>
+  <a href="{% url 'social:begin' 'google-oauth2' %}">Google+ (the same)</a>
+</body>
+
