@@ -121,11 +121,6 @@ AUTH_PASSWORD_VALIDATORS = [
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY = "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"
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER ='yaro93'
-EMAIL_HOST_PASSWORD ='Marilyn1'#should work SMTP mail
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
