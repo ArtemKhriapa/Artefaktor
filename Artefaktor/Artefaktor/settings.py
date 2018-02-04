@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-from .dbsettings import dbsettings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,8 +24,6 @@ SECRET_KEY = 'h$mk)4w^&4g!g5_t(gs)cza)nm-s!koyi&0mr+^5hp__+1dx&@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -37,14 +34,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
+    'rest_framework_gis',
     'django_filters',
+    'social_django',
+    'django.contrib.gis',
+    'api',
 
     'apps.artefact',
     'apps.incubator',
     'apps.layar',
     'apps.POI',
     'apps.wallet',
+    'apps.userauth',
 
     'apps.bonusshop.cart',
     'apps.bonusshop.catalog',
@@ -66,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'Artefaktor.urls'
@@ -73,7 +77,7 @@ ROOT_URLCONF = 'Artefaktor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,10 +85,26 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+
+    'django.contrib.auth.backends.ModelBackend',
+
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.yahoo.YahooOpenId',
+    'social_core.backends.facebook.FacebookOAuth2',
+)
 
 WSGI_APPLICATION = 'Artefaktor.wsgi.application'
 
@@ -92,18 +112,13 @@ WSGI_APPLICATION = 'Artefaktor.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = dbsettings
-'''{
+DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': '1',
-        'HOST': '127.0.0.1', # Set to empty string for localhost.
-        'PORT': '5432', # Set to empty string for default.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-'''
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -123,6 +138,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.live.com'
+EMAIL_HOST_USER = 'no_reply_art@outlook.com'
+EMAIL_HOST_PASSWORD = 'Pyaug12345'#should work SMTP mail
+EMAIL_PORT = 465
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -142,3 +162,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL = 'login'
+
+LOGOUT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = 'home'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS':
+        ('django_filters.rest_framework.DjangoFilterBackend',)
+}
+
+#keys for FB
+SOCIAL_AUTH_FACEBOOK_KEY = '1482602135170781'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '161ef8555417b340fff785894ab6e08d'  # App Secret
+
+SOCIAL_AUTH_GOOGE_KEY = '657928198709-fho4mgmevjdk2biojckgvtfe5m75mf5q.apps.googleusercontent.com'  # App ID
+SOCIAL_AUTH_GOOGE_SECRET = '5WVe9SuY_hbzRJdocmmr8zH2'  # App Secret
