@@ -13,6 +13,8 @@ class GisPOISerializer(GeoFeatureModelSerializer):
         fields = (
             'name',
             'description',
+            'addres',
+            'radius',
             'create_in',
             'created_was',
             'image'
@@ -29,6 +31,8 @@ class NewGisPOISerializer(GeoFeatureModelSerializer):
         fields = (
             'name',
             'description',
+            'addres',
+            'radius',
             'latitude',
             'longitude'
         )

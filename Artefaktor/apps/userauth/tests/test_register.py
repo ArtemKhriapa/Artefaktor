@@ -22,7 +22,7 @@ class RegisterTest(TestCase):
 
     def test_success(self):
         response = self.c.get(
-            '/registration/success/'
+            '/api/registration/success/'
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, [
@@ -38,13 +38,13 @@ class RegisterTest(TestCase):
     def test_get_registration_forbidden(self):
 
         response = self.c.get(
-            '/registration/'
+            '/api/registration/'
         )
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_post_registration_with_validation_unique(self):
         response = self.c.post(
-            '/registration/',
+            '/api/registration/',
             data = {
                 'username' : 'test_user',
                 'user_firstname' : 'user_first_name',
@@ -55,7 +55,7 @@ class RegisterTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # username
         response = self.c.post(
-            '/registration/',
+            '/api/registration/',
             data = {
                 'username' : self.user.username,
                 'user_firstname' : 'user_first_name',
@@ -72,7 +72,7 @@ class RegisterTest(TestCase):
         })
         # email
         response = self.c.post(
-            '/registration/',
+            '/api/registration/',
             data = {
                 'username' : 'enother_test_user',
                 'user_firstname' : 'user_first_name',
@@ -90,7 +90,7 @@ class RegisterTest(TestCase):
 
     def test_validation_responce_data_registration(self):
         response = self.c.post(
-            '/registration/',
+            '/api/registration/',
             data={
                 'username': 'test_user',
                 'user_firstname': 'user_first_name',
@@ -106,32 +106,32 @@ class RegisterTest(TestCase):
 
     def test_404_on_bad_OTC(self):
         response = self.c.get(
-            '/registration/{}/'.format('a'*32)
+            '/api/registration/{}/'.format('a'*32)
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
     def test_get_OTC(self):
         response = self.c.get(
-            '/registration/{}/'.format(self.reg_try.otc.otc)
+            '/api/registration/{}/'.format(self.reg_try.otc.otc)
         )
         # print(self.reg_try.otc.otc)
         # print (dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['otc'], str(self.reg_try.otc.otc))
         self.assertEqual(response.data['is_used'], False)
-        self.assertEqual(response.data['link'], "http://127.0.0.1:8000/registration/{}".format(self.reg_try.otc.otc))
+        self.assertEqual(response.data['link'], "http://127.0.0.1:8000/api/registration/{}".format(self.reg_try.otc.otc))
         self.assertEqual(response.data, {
             'otc': str(self.reg_try.otc.otc),
             'created_in': response.data['created_in'],
             'is_used': False,
             'used_in': None,
-            'link': "http://127.0.0.1:8000/registration/{}".format(self.reg_try.otc.otc)
+            'link': "http://127.0.0.1:8000/api/registration/{}".format(self.reg_try.otc.otc)
         })
 
     def test_get_used_OTC(self):
         self.reg_try.otc.apply()
         response = self.c.get(
-            '/registration/{}/'.format(self.reg_try.otc.otc)
+            '/api/registration/{}/'.format(self.reg_try.otc.otc)
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -139,14 +139,14 @@ class RegisterTest(TestCase):
     def test_cheking_URL_entering_password_for_registration(self):
         # cheking URL
         response = self.c.get(
-            '/registration/{}/set_password/'.format(self.reg_try.otc.otc)
+            '/api/registration/{}/set_password/'.format(self.reg_try.otc.otc)
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_entering_unfit_password_for_registration(self):
         # POST unfit password
         response = self.c.post(
-            '/registration/{}/set_password/'.format(self.reg_try.otc.otc),
+            '/api/registration/{}/set_password/'.format(self.reg_try.otc.otc),
                 data={
                     'password': '123456',
                     'confirm_password': '12345'
@@ -162,7 +162,7 @@ class RegisterTest(TestCase):
     def test_entering_short_password_for_registration(self):
         # POST short password
         response = self.c.post(
-            '/registration/{}/set_password/'.format(self.reg_try.otc.otc),
+            '/api/registration/{}/set_password/'.format(self.reg_try.otc.otc),
             data={
                 'password': '123',
                 'confirm_password': '12345'
@@ -174,10 +174,11 @@ class RegisterTest(TestCase):
                     "Password must be 4 or more characters."
                 ]
             })
+
     def test_entering_normal_for_registration_and_checking_user(self):
         # POST fit password
         response = self.c.post(
-            '/registration/{}/set_password/'.format(self.reg_try.otc.otc),
+            '/api/registration/{}/set_password/'.format(self.reg_try.otc.otc),
             data={
                 'password': '123456',
                 'confirm_password': '123456'
@@ -197,7 +198,7 @@ class RegisterTest(TestCase):
             )
         #print(test_reg_try.is_finished)
         response = self.c.post(
-            '/registration/{}/set_password/'.format(test_reg_try.otc.otc),
+            '/api/registration/{}/set_password/'.format(test_reg_try.otc.otc),
                 data={
                     'password': '654321',
                     'confirm_password': '654321'
