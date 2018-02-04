@@ -118,6 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "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"
 
 EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER ='yaro93'
