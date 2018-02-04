@@ -119,11 +119,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER ='yaro93'
+EMAIL_HOST_PASSWORD ='Marilyn1'#should work SMTP mail
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.live.com'
-EMAIL_HOST_USER = 'no_reply_art@outlook.com'
-EMAIL_HOST_PASSWORD = 'Pyaug12345'#should work SMTP mail
-EMAIL_PORT = 465
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
