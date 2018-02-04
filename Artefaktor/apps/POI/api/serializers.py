@@ -46,11 +46,13 @@ class NewGisPOISerializer(GeoFeatureModelSerializer):
         return data
 
     def create(self, validated_data):
-        point = Point(validated_data['latitude'],validated_data['longitude'] ) # transformation lat/lon in point format
+        point = Point(validated_data['latitude'], validated_data['longitude'] ) # transformation lat/lon in point format
         newpoint = GisPOI.objects.create(
             name =validated_data.get('name'),
             point = point,
-            description = validated_data['description']
+            description = validated_data['description'],
+            radius = validated_data['radius'],
+            addres = validated_data['addres'],
         )
         newpoint.save()
         return newpoint
