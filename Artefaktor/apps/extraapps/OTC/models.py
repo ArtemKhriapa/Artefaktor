@@ -26,7 +26,7 @@ class OTCRegistration(OTCBase):
     link = models.CharField(max_length=256, verbose_name="link", blank=True)
 
     def linkgenerate(self):
-        link = 'http://127.0.0.1:8000/registration/' + str(self.otc)
+        link = 'http://127.0.0.1:8000/api/registration/' + str(self.otc)
         return link
 
     def save(self, *args, **kwargs):

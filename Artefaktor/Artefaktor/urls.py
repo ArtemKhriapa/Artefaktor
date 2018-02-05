@@ -20,10 +20,10 @@ from apps.userauth.api.views import HomeView
 
 urlpatterns = [
     url(r'^$', HomeView, name='home'), #temporary plug
-    url(r'^oauth/', include('social_django.urls', namespace='social')),
+    url(r'^api/', include('api.urls')),  #all url, who work for REST
     url(r'^admin/', admin.site.urls),
-    url(r'^registration/', include('apps.userauth.api.urls')),
+
     url(r'^login/$', auth_views.login, {'template_name': 'login.html'}, name='login'),
     url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
-    url(r'^POI/', include('apps.POI.api.urls')),
+    url(r'^oauth/', include('social_django.urls', namespace='social')),
 ]
