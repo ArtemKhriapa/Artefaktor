@@ -30,8 +30,7 @@ class GisPOI(generics.RetrieveAPIView):
 class RadiusGisPOI(generics.ListCreateAPIView):
     serializer_class = GisPOISerializer
 
-    def get_queryset(self):
+    def get_queryset(self,*args, **kwargs):
         point = Point(float(self.kwargs.get('lat')), float(self.kwargs.get('lon')))
         pnt = GEOSGeometry(point,srid=4326 )
         return GisPOI_model.objects.filter(point__distance_lte=(pnt, Distance(km=self.kwargs.get('radius_km'))))
-        #get_object_or_404(GisPOI_model, id=self.kwargs.get('POI_id'))
