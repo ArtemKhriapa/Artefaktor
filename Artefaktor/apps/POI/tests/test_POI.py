@@ -100,7 +100,7 @@ class RegisterTest(TestCase):
 
 
     def test_get_POI(self):
-        response = self.c.get('/api/POI/{}/'.format(self.GisPOI.id))
+        response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['properties']['description'], self.GisPOI.description)
         self.assertEqual(response.data['properties']['name'], self.GisPOI.name)

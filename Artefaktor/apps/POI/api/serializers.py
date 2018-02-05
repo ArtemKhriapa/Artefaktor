@@ -51,8 +51,8 @@ class NewGisPOISerializer(GeoFeatureModelSerializer):
             name =validated_data.get('name'),
             point = point,
             description = validated_data['description'],
-            radius = validated_data['radius'],
             addres = validated_data['addres'],
+            radius = validated_data['radius'],
         )
         newpoint.save()
         return newpoint

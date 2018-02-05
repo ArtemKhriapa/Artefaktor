@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_filters',
     'social_django',
     'django.contrib.gis',
+    'django.contrib.gis.db.backends.postgis',
     'api',
 
     'apps.artefact',

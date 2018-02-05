@@ -13,7 +13,7 @@ class GisPOI(modelsgis.Model):
     description = modelsgis.TextField()
     create_in = modelsgis.DateTimeField(auto_now_add = True)
     created_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True)
-    radius = modelsgis.IntegerField(default=0)          # radius of POI in meters. fol localization near large objects
+    radius = modelsgis.IntegerField(default=0, blank = True)          # radius of POI in meters. fol localization near large  geo-objects
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
 
