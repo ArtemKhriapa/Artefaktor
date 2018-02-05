@@ -12,5 +12,5 @@ def mail_notification(sender, **kwargs):
     send_mail(
         'Please verify your account',
         message=render_to_string('Templates/OTC_Check_Template.html', {'foo': 'bar'}),
-        from_email= no_reply_art@outlook.com,
-        recipient_list=yar.s93@gmail.com)
+        from_email= 'no_reply_art@outlook.com',
+        recipient_list=['yar.s93@gmail.com'])
