@@ -31,15 +31,15 @@ class RegisterTest(TestCase):
     def test_post_POI(self):
         response = self.c.post(
             '/api/POI/',
-            data = {
-                'name' : 'some_test_poi',
-                'addres' :'some addres in anywhere' ,
-                'description' : 'description description ',
-                'radius' : '3',
-                'extra_data': 'extra_data extra_data',
-                'latitude': '33.3333',
-                'longitude' : '55.5555'
-            }
+                data = {
+                    'name' : 'some_test_poi',
+                    'addres' :'some addres in anywhere' ,
+                    'description' : 'description description ',
+                    'radius' : '3',
+                    'extra_data': 'extra_data extra_data',
+                    'latitude': '33.3333',
+                    'longitude' : '55.5555'
+                }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['properties']['description'],'description description')
@@ -52,15 +52,15 @@ class RegisterTest(TestCase):
         # clear data
         response = self.c.post(
             '/api/POI/',
-            data = {
-                'name' : '',
-                'addres' :'' ,
-                'description' : '',
-                'radius' : '',
-                'extra_data': '',
-                'latitude' : '',
-                'longitude' : '',
-            }
+                data = {
+                    'name' : '',
+                    'addres' :'' ,
+                    'description' : '',
+                    'radius' : '',
+                    'extra_data': '',
+                    'latitude' : '',
+                    'longitude' : '',
+                }
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -71,28 +71,28 @@ class RegisterTest(TestCase):
         # wrong data
         response = self.c.post(
             '/api/POI/',
-            data={
-                'name': 'some name',
-                'addres': '',
-                'description': 'some desc',
-                'radius': '',
-                'extra_data': '',
-                'latitude': '90.1',
-                'longitude': '180.0'
-            }
+                data={
+                    'name': 'some name',
+                    'addres': '',
+                    'description': 'some desc',
+                    'radius': '',
+                    'extra_data': '',
+                    'latitude': '90.1',
+                    'longitude': '180.0'
+                }
         )
         self.assertEqual(response.data['non_field_errors'], ['The latitude should be from -90 to 90 degrees.'])
         response = self.c.post(
             '/api/POI/',
-            data={
-                'name': 'some name',
-                'addres': '',
-                'description': 'some desc',
-                'radius': '',
-                'extra_data': '',
-                'latitude': '90.0',
-                'longitude': '180.1'
-            }
+                data={
+                    'name': 'some name',
+                    'addres': '',
+                    'description': 'some desc',
+                    'radius': '',
+                    'extra_data': '',
+                    'latitude': '90.0',
+                    'longitude': '180.1'
+                }
         )
         self.assertEqual(response.data['non_field_errors'], ['The longitude should be from -180 to 180 degrees.'])
 
@@ -107,4 +107,5 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
     def test_get_POI_in_radius(self):
-        response = self.c.get('/api/POI/inradius/{}@{}')
+        response = self.c.get('/api/POI/inradius/{}@{}km{}/'.format(-33.3333, -179.8888,2.5))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
