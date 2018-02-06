@@ -41,20 +41,20 @@ INSTALLED_APPS = [
     'social_django',
     'django.contrib.gis',
     'django.contrib.gis.db.backends.postgis',
-    'api',
 
+    'api',
     'apps.artefact',
     'apps.incubator',
     'apps.layar',
     'apps.POI',
     'apps.wallet',
     'apps.userauth',
+    'apps.filter',
 
     'apps.bonusshop.cart',
     'apps.bonusshop.catalog',
     'apps.bonusshop.product',
     'apps.bonusshop.order',
-    'apps.bonusshop.filter',
 
     'apps.extraapps.OTC',
     'apps.extraapps.notifications',
@@ -171,8 +171,7 @@ LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'home'
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS':
-        ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS':('django_filters.rest_framework.DjangoFilterBackend',)
 }
 
 #keys for FB
