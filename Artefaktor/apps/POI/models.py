@@ -2,6 +2,7 @@
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models as modelsgis
+from taggit.managers import TaggableManager
 
 class GisPOI(modelsgis.Model):
 
@@ -16,9 +17,7 @@ class GisPOI(modelsgis.Model):
     radius = modelsgis.IntegerField(default=0, blank = True)          # radius of POI in meters. fol localization near large  geo-objects
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
-
-    # image_meddle = modelsgis.ImageField()
-    # image_small = modelsgis.ImageField()
+    tags = TaggableManager()
 
 
     def __str__(self):

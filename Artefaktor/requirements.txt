@@ -5,4 +5,5 @@ django-filters==0.2.1
 djangorestframework==3.7.1
 social-auth-app-django==2.1.0
 djangorestframework-gis==0.12
-
+django-taggit==0.22.2
+django-taggit-serializer==0.1.5

@@ -1,12 +1,13 @@
 from rest_framework import serializers
 from apps.POI.models import GisPOI
 from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
+from taggit_serializer.serializers import TagListSerializerField, TaggitSerializer
 from django.contrib.gis.geos import Point
 from rest_framework.validators import UniqueValidator
 
 
 class GisPOISerializer(GeoFeatureModelSerializer):
-
+    tags = TagListSerializerField()
     class Meta:
         model = GisPOI
         geo_field = 'point'
@@ -17,13 +18,16 @@ class GisPOISerializer(GeoFeatureModelSerializer):
             'radius',
             'create_in',
             'created_was',
-            'image'
+            'image',
+            'tags'
         )
 
 
-class NewGisPOISerializer(GeoFeatureModelSerializer):
+class NewGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
     latitude = serializers.FloatField(write_only = True)
     longitude = serializers.FloatField(write_only = True)
+    tags = TagListSerializerField()
+    add_tags = serializers.CharField(write_only = True) # enter words separated by a coma+space
 
     class Meta:
         model = GisPOI
@@ -33,6 +37,8 @@ class NewGisPOISerializer(GeoFeatureModelSerializer):
             'description',
             'addres',
             'radius',
+            'add_tags',
+            'tags',
             'latitude',
             'longitude'
         )
@@ -46,13 +52,17 @@ class NewGisPOISerializer(GeoFeatureModelSerializer):
         return data
 
     def create(self, validated_data):
-        point = Point(validated_data['latitude'], validated_data['longitude'] ) # transformation lat/lon in point format
+        # transformation lat/lon in point format
+        point = Point(validated_data['latitude'], validated_data['longitude'] )
         newpoint = GisPOI.objects.create(
             name =validated_data.get('name'),
             point = point,
             description = validated_data['description'],
             addres = validated_data['addres'],
-            radius = validated_data['radius'],
+            radius = validated_data['radius']
         )
+        # adding tags
+        for newtag in (validated_data['add_tags'].split(", ")):
+            newpoint.tags.add(newtag)
         newpoint.save()
         return newpoint
