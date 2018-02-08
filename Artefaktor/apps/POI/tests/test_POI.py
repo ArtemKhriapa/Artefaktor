@@ -23,10 +23,24 @@ class RegisterTest(TestCase):
             point = Point(self.lat, self.lon)
         )
 
+    def test_get_POI_with_search(self):
+        response = self.c.get('/api/POI/?search=test')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+    def test_get_POI_with_filters(self):
+        response = self.c.get('/api/POI/?name={}&addres={}&description={}'.format(
+            self.GisPOI.name,
+            self.GisPOI.addres,
+            self.GisPOI.description)
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+
     def test_new_poi_url(self):
         response = self.c.get('/api/POI/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
 
     def test_post_POI(self):
         response = self.c.post(
@@ -39,7 +53,7 @@ class RegisterTest(TestCase):
                     'extra_data': 'extra_data extra_data',
                     'latitude': '33.3333',
                     'longitude' : '55.5555',
-                    'add_tags' : 'qwerty, asdfgh',
+                    'add_tags' : 'qwerty',
                     'tags' : '',
                 }
         )
@@ -49,8 +63,7 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['properties']['addres'], 'some addres in anywhere')
         self.assertEqual(response.data['properties']['radius'],  3 )
         self.assertEqual(response.data['geometry']['coordinates'], [33.3333,55.5555 ])
-        self.assertEqual(response.data['properties']['tags'], ['asdfgh','qwerty'])
-
+        self.assertEqual(response.data['properties']['tags'], ['qwerty'])
 
     def test_post_POI_validation_clear_data(self):
         # clear data
@@ -108,7 +121,6 @@ class RegisterTest(TestCase):
         )
 
         self.assertEqual(response.data['non_field_errors'], ['The longitude should be from -180 to 180 degrees.'])
-
 
     def test_get_POI(self):
         response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))
