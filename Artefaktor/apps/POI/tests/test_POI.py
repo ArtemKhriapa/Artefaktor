@@ -25,7 +25,7 @@ class RegisterTest(TestCase):
 
     def test_new_poi_url(self):
         response = self.c.get('/api/POI/')
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
     def test_post_POI(self):
@@ -38,7 +38,9 @@ class RegisterTest(TestCase):
                     'radius' : '3',
                     'extra_data': 'extra_data extra_data',
                     'latitude': '33.3333',
-                    'longitude' : '55.5555'
+                    'longitude' : '55.5555',
+                    'add_tags' : 'qwerty, asdfgh',
+                    'tags' : '',
                 }
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -47,8 +49,10 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['properties']['addres'], 'some addres in anywhere')
         self.assertEqual(response.data['properties']['radius'],  3 )
         self.assertEqual(response.data['geometry']['coordinates'], [33.3333,55.5555 ])
+        self.assertEqual(response.data['properties']['tags'], ['asdfgh','qwerty'])
 
-    def test_post_POI_validation_data(self):
+
+    def test_post_POI_validation_clear_data(self):
         # clear data
         response = self.c.post(
             '/api/POI/',
@@ -60,15 +64,18 @@ class RegisterTest(TestCase):
                     'extra_data': '',
                     'latitude' : '',
                     'longitude' : '',
+                    'add_tags' : '',
+                    'tags' : '',
                 }
         )
-
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['description'], ['This field may not be blank.'])
         self.assertEqual(response.data['name'], ['This field may not be blank.'])
         self.assertEqual(response.data['longitude'], ['A valid number is required.'])
         self.assertEqual(response.data['latitude'], ['A valid number is required.'])
-        # wrong data
+        self.assertEqual(response.data['add_tags'], ['This field may not be blank.'])
+        
+    def test_post_POI_validation_wrong_data(self):
         response = self.c.post(
             '/api/POI/',
                 data={
@@ -78,9 +85,12 @@ class RegisterTest(TestCase):
                     'radius': '',
                     'extra_data': '',
                     'latitude': '90.1',
-                    'longitude': '180.0'
+                    'longitude': '180.0',
+                    'add_tags' : 'qwerty',
+                    'tags': ''
                 }
         )
+
         self.assertEqual(response.data['non_field_errors'], ['The latitude should be from -90 to 90 degrees.'])
         response = self.c.post(
             '/api/POI/',
@@ -91,9 +101,12 @@ class RegisterTest(TestCase):
                     'radius': '',
                     'extra_data': '',
                     'latitude': '90.0',
-                    'longitude': '180.1'
+                    'longitude': '180.1',
+                    'add_tags' : 'qwerty',
+                    'tags': ''
                 }
         )
+
         self.assertEqual(response.data['non_field_errors'], ['The longitude should be from -180 to 180 degrees.'])
 
 
