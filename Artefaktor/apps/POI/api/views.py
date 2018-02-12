@@ -6,8 +6,7 @@ from django.contrib.gis.measure import Distance
 from rest_framework.pagination import PageNumberPagination
 from apps.POI.api.serializers  import  GisPOISerializer, NewGisPOISerializer
 from apps.POI.models import GisPOI as GisPOI_model
-from rest_framework_gis.filterset import GeoFilterSet
-from rest_framework_gis.filters import GeometryFilter
+from rest_framework_gis.filters import InBBoxFilter, DistanceToPointFilter
 
 
 class CustomPagePagination(PageNumberPagination):
@@ -16,12 +15,26 @@ class CustomPagePagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 100000
 
+# class PointInRadius(DistanceToPointFilter):
+#     point = Point(float(self.kwargs.get('lat')), float(self.kwargs.get('lon')))
+    # pnt = GEOSGeometry(self.point,srid=4326 )
+    #
+    # def get_queryset(self, *args, **kwargs):
+    #     return GisPOI_model.objects.filter(point__distance_lte=(pnt, Distance(km=self.distance)))
+
+
+
 class NewGisPOI(generics.ListCreateAPIView):
     queryset = GisPOI_model.objects.all()
     serializer_class = NewGisPOISerializer
     pagination_class = CustomPagePagination
-    filter_backends =(DjangoFilterBackend, filters.SearchFilter)
-    filter_fields = ('name', 'addres','description' ) # filter with 100% match in fields ?
+    bbox_filter_field = 'point'
+    distance_filter_field = 'point'
+    distance_filter_convert_meters = True
+    bbox_filter_include_overlapping = True
+    distanc_filter_include_overlapping = True
+    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, DistanceToPointFilter)
+    filter_fields = ('name','description') # filter with 100% match in fields ?
     search_fields = ('name','description', 'addres') #search partial match in all of this fields ?
 
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from apps.POI.models import GisPOI
-from rest_framework_gis.serializers import GeoFeatureModelSerializer, GeometrySerializerMethodField
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from taggit_serializer.serializers import TagListSerializerField, TaggitSerializer
 from django.contrib.gis.geos import Point
 from rest_framework.validators import UniqueValidator
