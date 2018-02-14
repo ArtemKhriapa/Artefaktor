@@ -13,18 +13,18 @@ class CustomPagePagination(PageNumberPagination):
     #class for set pagination parameters
     page_size = 4 #obj in page
     page_size_query_param = 'page_size'
-    max_page_size = 100000
+    max_page_size = 7
 
-# class PointInRadius(DistanceToPointFilter):
-#     point = Point(float(self.kwargs.get('lat')), float(self.kwargs.get('lon')))
-    # pnt = GEOSGeometry(self.point,srid=4326 )
-    #
-    # def get_queryset(self, *args, **kwargs):
-    #     return GisPOI_model.objects.filter(point__distance_lte=(pnt, Distance(km=self.distance)))
+class PointInRadius(DistanceToPointFilter):
+    # find all POI in ra
+    def filter_queryset(self, request, queryset, view):
+        dist = request.query_params.get(self.dist_param)
+        point = self.get_filter_point(request)
+        return GisPOI_model.objects.filter(point__distance_lte=(point, Distance(km=dist) ))
 
 
 
-class NewGisPOI(generics.ListCreateAPIView):
+class ListGisPOI(generics.ListCreateAPIView):
     queryset = GisPOI_model.objects.all()
     serializer_class = NewGisPOISerializer
     pagination_class = CustomPagePagination
@@ -33,7 +33,7 @@ class NewGisPOI(generics.ListCreateAPIView):
     distance_filter_convert_meters = True
     bbox_filter_include_overlapping = True
     distanc_filter_include_overlapping = True
-    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, DistanceToPointFilter)
+    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, PointInRadius)
     filter_fields = ('name','description') # filter with 100% match in fields ?
     search_fields = ('name','description', 'addres') #search partial match in all of this fields ?
 
@@ -54,10 +54,10 @@ class GisPOI(generics.RetrieveAPIView):
         return get_object_or_404(GisPOI_model, id=self.kwargs.get('POI_id'))
 
 
-class RadiusGisPOI(generics.ListCreateAPIView):
-    serializer_class = GisPOISerializer
-
-    def get_queryset(self,*args, **kwargs):
-        point = Point(float(self.kwargs.get('lat')), float(self.kwargs.get('lon')))
-        pnt = GEOSGeometry(point,srid=4326 )
-        return GisPOI_model.objects.filter(point__distance_lte=(pnt, Distance(km=self.kwargs.get('radius_km'))))
+# class RadiusGisPOI(generics.ListCreateAPIView):
+#     serializer_class = GisPOISerializer
+#
+#     def get_queryset(self,*args, **kwargs):
+#         point = Point(float(self.kwargs.get('lat')), float(self.kwargs.get('lon')))
+#         pnt = GEOSGeometry(point,srid=4326 )
+#         return GisPOI_model.objects.filter(point__distance_lte=(pnt, Distance(km=self.kwargs.get('radius_km'))))
