@@ -131,6 +131,41 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['properties']['radius'], self.GisPOI.radius)
         self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
-    def test_get_POI_in_radius(self):
-        response = self.c.get('/api/POI/inradius/{}@{}km{}/'.format(-33.3333, -179.8888,2.5))
+    #
+
+    def test_get_POI_in_box(self):
+
+        self.GisPOI = GisPOI.objects.create(
+            name ='test_poi',
+            addres = 'some addres',
+            description = 'description',
+            radius = 1,
+            extra_data = 'some data',
+            point = Point(10.5, 10.5)
+        )
+        self.GisPOI = GisPOI.objects.create(
+            name='test_poi',
+            addres='some addres',
+            description='description',
+            radius=1,
+            extra_data='some data',
+            point=Point(10.9999, 10.9999)
+        )
+        self.GisPOI = GisPOI.objects.create(
+            name='test_poi',
+            addres='some addres',
+            description='description',
+            radius=1,
+            extra_data='some data',
+            point=Point(11.1, 11.1)
+        )
+
+        response = self.c.get('/api/POI/?in_bbox={},{},{},{}'.format(10.0, 10.0, 11.0, 11.0))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+       
+
+    # def test_get_POI_in_radius(self):
+
+    # response = self.c.get('/api/POI/inradius/{}@{}km{}/'.format(-33.3333, -179.8888,2.5))
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)

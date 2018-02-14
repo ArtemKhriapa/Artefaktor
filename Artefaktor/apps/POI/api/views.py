@@ -15,9 +15,9 @@ class CustomPagePagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 7
 
-class PointInRadius(DistanceToPointFilter):
-    # find all POI in ra
-    def filter_queryset(self, request, queryset, view):
+class PointInRadiusFilter(DistanceToPointFilter):
+    # find all POI in radius
+    def get_queryset(self, request):#, queryset, view
         dist = request.query_params.get(self.dist_param)
         point = self.get_filter_point(request)
         return GisPOI_model.objects.filter(point__distance_lte=(point, Distance(km=dist) ))
@@ -33,7 +33,7 @@ class ListGisPOI(generics.ListCreateAPIView):
     distance_filter_convert_meters = True
     bbox_filter_include_overlapping = True
     distanc_filter_include_overlapping = True
-    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, PointInRadius)
+    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, PointInRadiusFilter)#
     filter_fields = ('name','description') # filter with 100% match in fields ?
     search_fields = ('name','description', 'addres') #search partial match in all of this fields ?
 
