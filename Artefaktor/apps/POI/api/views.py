@@ -17,11 +17,15 @@ class CustomPagePagination(PageNumberPagination):
 
 class PointInRadiusFilter(DistanceToPointFilter):
     # find all POI in radius
-    def get_queryset(self, request):#, queryset, view
-        dist = request.query_params.get(self.dist_param)
-        point = self.get_filter_point(request)
-        return GisPOI_model.objects.filter(point__distance_lte=(point, Distance(km=dist) ))
-
+    def filter_queryset(self, request, queryset, view):
+        if ('point' and 'dist') in request.GET :
+            # only if 'point' and 'dist' in request call this filter
+            # without this enother filters not working
+            dist = request.query_params.get(self.dist_param)
+            point = self.get_filter_point(request)
+            return GisPOI_model.objects.filter(point__distance_lte=(point, Distance(km=dist)))
+        else:
+            return queryset
 
 
 class ListGisPOI(generics.ListCreateAPIView):
