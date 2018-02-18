@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.gis.db.backends.postgis',
     'taggit',
     'taggit_serializer',
+    'mptt',
 
     'api',
     'apps.artefact',
