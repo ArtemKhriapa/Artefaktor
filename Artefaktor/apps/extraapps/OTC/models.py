@@ -11,8 +11,8 @@ class OTCBase(models.Model):
     is_used = models.BooleanField(verbose_name="is used", default = False)
 
     def apply(self):
-        self.is_used = True
-        self.used_on = timezone.now()
+        self.is_used = True         #utilization
+        self.used_in = timezone.now()
         self.save()
 
     def __str__(self):
@@ -26,7 +26,7 @@ class OTCRegistration(OTCBase):
     link = models.CharField(max_length=256, verbose_name="link", blank=True)
 
     def linkgenerate(self):
-        link = 'http://127.0.0.1:8000/registration/' + str(self.otc)
+        link = 'http://127.0.0.1:8000/api/registration/' + str(self.otc)
         return link
 
     def save(self, *args, **kwargs):
