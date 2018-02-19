@@ -1,8 +1,9 @@
 from django.contrib import admin
 from .models import  GisPOI, Category
 from django_mptt_admin.admin import DjangoMpttAdmin
+from mptt.admin import MPTTModelAdmin
 
-class CategoryAdmin(DjangoMpttAdmin):
+class CategoryAdmin( DjangoMpttAdmin):  # MPTTModelAdmin):
         pass
 
 admin.site.register(Category, CategoryAdmin)

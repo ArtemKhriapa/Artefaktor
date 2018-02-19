@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework.test import APIClient
 from rest_framework import status
 from utils.helpers_for_tests import dump, create_user
-from apps.POI.models import GisPOI
+from apps.POI.models import GisPOI, Category
 from django.contrib.gis.geos import Point
 
 
@@ -14,13 +14,15 @@ class RegisterTest(TestCase):
     def setUp(self):
 
         self.c = APIClient()
+        self.cat = Category.objects.create(name = 'some_cat')
         self.GisPOI = GisPOI.objects.create(
             name ='test_poi',
             addres = 'some addres',
             description = 'description',
             radius = 1,
             extra_data = 'some data',
-            point = Point(self.lat, self.lon)
+            point = Point(self.lat, self.lon),
+            category = self.cat
         )
 
     def test_get_POI_with_search(self):
@@ -54,8 +56,10 @@ class RegisterTest(TestCase):
                     'longitude' : '55.5555',
                     'add_tags' : 'qwerty',
                     'tags' : '',
+                    'categoty' : 'main cat'
                 }
         )
+        print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['properties']['description'],'description description')
         self.assertEqual(response.data['properties']['name'], 'some_test_poi')
@@ -63,6 +67,7 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['properties']['radius'],  3 )
         self.assertEqual(response.data['geometry']['coordinates'], [33.3333,55.5555 ])
         self.assertEqual(response.data['properties']['tags'], ['qwerty'])
+        self.assertEqual(response.data['properties']['category']['name'], 'main cat')
 
     def test_post_POI_validation_clear_data(self):
         # clear data
@@ -123,11 +128,13 @@ class RegisterTest(TestCase):
 
     def test_get_POI(self):
         response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))
+        #print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['properties']['description'], self.GisPOI.description)
         self.assertEqual(response.data['properties']['name'], self.GisPOI.name)
         self.assertEqual(response.data['properties']['addres'], self.GisPOI.addres)
         self.assertEqual(response.data['properties']['radius'], self.GisPOI.radius)
+        self.assertEqual(response.data['properties']['category']['name'], self.GisPOI.category.name)
         self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
     def test_get_POI_in_box(self):

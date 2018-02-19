@@ -8,16 +8,28 @@ from mptt.models import MPTTModel, TreeForeignKey
 import mptt
 
 class Category(MPTTModel):
+
     class Meta():
         db_table = 'category'
-    name = models.CharField(max_length = 150, verbose_name = 'Category')
+
+    SUPPORTED_UNITS = (
+        ('main','main cat'),
+        ('cat1','cat1'),
+        ('cat2','cat2'),
+        ('1.1','sub cat1'),
+        ('1.2','sub cat2'),
+        ('2.1','sub_cat1'),
+        ('2.2','sub_cat2')
+    )
+
+    name = models.CharField(max_length = 150,  choices= SUPPORTED_UNITS, verbose_name = 'Category')
     parent = TreeForeignKey('self', null =True, blank = True, related_name = 'CHILD', verbose_name='PARENT')
 
     class MPTTMeta:
         order_insertion_by = ['name']
 
     def __str__(self):
-            return "Name: %s" % (self.name)
+            return "-- %s" % (self.name)
 
 class GisPOI(modelsgis.Model):
 
@@ -29,7 +41,7 @@ class GisPOI(modelsgis.Model):
     description = modelsgis.TextField()
     create_in = modelsgis.DateTimeField(auto_now_add = True)
     created_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True)
-    radius = modelsgis.IntegerField(default=0, blank = True)          # radius of POI in meters. fol localization near large  geo-objects
+    radius = modelsgis.PositiveIntegerField(default=0, blank = True)          # radius of POI in meters. fol localization near large  geo-objects
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
     tags = TaggableManager()
