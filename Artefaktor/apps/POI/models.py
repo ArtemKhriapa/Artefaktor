@@ -5,14 +5,14 @@ from django.contrib.gis.db import models as modelsgis
 from taggit.managers import TaggableManager
 from mptt.models import MPTTModel, TreeForeignKey
 
-class Category(MPTTModel):
-    class Meta():
-        db_table = 'category'
-    name = models.CharField(max_length = 150)
-    parent = TreeForeignKey('self', null =True, blank = True, related_name = 'CHILD' )
-
-    class MPTTMeta:
-        order_insertion_by = ['name']
+# class Category(MPTTModel):
+#     class Meta():
+#         db_table = 'category'
+#     name = models.CharField(max_length = 150)
+#     parent = TreeForeignKey('self', null =True, blank = True, related_name = 'CHILD' )
+#
+#     class MPTTMeta:
+#         order_insertion_by = ['name']
 
 
 class GisPOI(modelsgis.Model):
