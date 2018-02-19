@@ -3,17 +3,21 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models as modelsgis
 from taggit.managers import TaggableManager
+
 from mptt.models import MPTTModel, TreeForeignKey
+import mptt
 
-# class Category(MPTTModel):
-#     class Meta():
-#         db_table = 'category'
-#     name = models.CharField(max_length = 150)
-#     parent = TreeForeignKey('self', null =True, blank = True, related_name = 'CHILD' )
-#
-#     class MPTTMeta:
-#         order_insertion_by = ['name']
+class Category(MPTTModel):
+    class Meta():
+        db_table = 'category'
+    name = models.CharField(max_length = 150, verbose_name = 'Category')
+    parent = TreeForeignKey('self', null =True, blank = True, related_name = 'CHILD', verbose_name='PARENT')
 
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    def __str__(self):
+            return "Name: %s" % (self.name)
 
 class GisPOI(modelsgis.Model):
 
@@ -29,7 +33,9 @@ class GisPOI(modelsgis.Model):
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
     tags = TaggableManager()
-
+    category = TreeForeignKey(Category,  blank=True, null=True, related_name='cat')
 
     def __str__(self):
         return "ID: %s" % (self.id)
+
+mptt.register(Category,)

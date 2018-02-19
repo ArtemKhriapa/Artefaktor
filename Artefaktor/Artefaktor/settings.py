@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'taggit',
     'taggit_serializer',
     'mptt',
+    'django_mptt_admin',
 
     'api',
     'apps.artefact',
