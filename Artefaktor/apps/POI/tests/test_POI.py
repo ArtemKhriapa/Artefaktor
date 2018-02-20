@@ -45,7 +45,7 @@ class RegisterTest(TestCase):
 
     def test_post_POI(self):
         response = self.c.post(
-            '/api/POI/',
+            '/api/POI/new/',
                 data = {
                     'name' : 'some_test_poi',
                     'addres' :'some addres in anywhere' ,
@@ -56,10 +56,11 @@ class RegisterTest(TestCase):
                     'longitude' : '55.5555',
                     'add_tags' : 'qwerty',
                     'tags' : '',
-                    'categoty' : 'main cat'
+                    #'category': '',
+                    'add_category' : 'some_cat'
                 }
         )
-        print(dump(response))
+        #print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['properties']['description'],'description description')
         self.assertEqual(response.data['properties']['name'], 'some_test_poi')
@@ -67,12 +68,13 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['properties']['radius'],  3 )
         self.assertEqual(response.data['geometry']['coordinates'], [33.3333,55.5555 ])
         self.assertEqual(response.data['properties']['tags'], ['qwerty'])
-        self.assertEqual(response.data['properties']['category']['name'], 'main cat')
+        category = Category.objects.get(name = 'some_cat')
+        self.assertEqual(response.data['properties']['category'], category.id)
 
     def test_post_POI_validation_clear_data(self):
         # clear data
         response = self.c.post(
-            '/api/POI/',
+            '/api/POI/new/',
                 data = {
                     'name' : '',
                     'addres' :'' ,
@@ -83,8 +85,10 @@ class RegisterTest(TestCase):
                     'longitude' : '',
                     'add_tags' : '',
                     'tags' : '',
+                    'add_category' : ''
                 }
         )
+        #print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['description'], ['This field may not be blank.'])
         self.assertEqual(response.data['name'], ['This field may not be blank.'])
@@ -94,37 +98,58 @@ class RegisterTest(TestCase):
         
     def test_post_POI_validation_wrong_data(self):
         response = self.c.post(
-            '/api/POI/',
+            '/api/POI/new/',
                 data={
                     'name': 'some name',
                     'addres': '',
                     'description': 'some desc',
-                    'radius': '',
+                    'radius': '1',
                     'extra_data': '',
                     'latitude': '90.1',
                     'longitude': '180.0',
                     'add_tags' : 'qwerty',
-                    'tags': ''
+                    'tags': '',
+                    'add_category' : 'some_cat'
                 }
         )
-
+        #print(dump(response))
         self.assertEqual(response.data['non_field_errors'], ['The latitude should be from -90 to 90 degrees.'])
+
         response = self.c.post(
-            '/api/POI/',
+            '/api/POI/new/',
                 data={
                     'name': 'some name',
                     'addres': '',
                     'description': 'some desc',
-                    'radius': '',
+                    'radius': '1',
                     'extra_data': '',
                     'latitude': '90.0',
                     'longitude': '180.1',
                     'add_tags' : 'qwerty',
-                    'tags': ''
+                    'tags': '',
+                    'add_category' : 'some_cat'
                 }
         )
-
+        #print(dump(response))
         self.assertEqual(response.data['non_field_errors'], ['The longitude should be from -180 to 180 degrees.'])
+
+        response = self.c.post(
+            '/api/POI/new/',
+                data={
+                    'name': 'some name',
+                    'addres': '',
+                    'description': 'some desc',
+                    'radius': '1',
+                    'extra_data': '',
+                    'latitude': '80.0',
+                    'longitude': '80.0',
+                    'add_tags' : 'qwerty',
+                    'tags': '',
+                    'add_category' : 'wrongcategory',
+                }
+        )
+        #print(dump(response))
+        self.assertEqual(response.data, ['Wrong categoty!']) # why it rise not dict?
 
     def test_get_POI(self):
         response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))

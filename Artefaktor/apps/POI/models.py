@@ -46,7 +46,7 @@ class GisPOI(modelsgis.Model):
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
     tags = TaggableManager()
-    category = TreeForeignKey(Category,  blank=True, null=True, related_name='cat')
+    category = TreeForeignKey(Category,  blank=True, null=True, related_name='cat') #is this may be clear?
 
     def __str__(self):
         return "ID: %s" % (self.id)
