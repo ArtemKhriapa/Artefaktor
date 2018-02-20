@@ -15,7 +15,7 @@ class CustomPagePagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 7
 
-class PointInRadiusFilter(DistanceToPointFilter):
+class PointInRadiusFilter(DistanceToPointFilter):     # fixme: move to apps.filter
     # find all POI in radius
     def filter_queryset(self, request, queryset, view):
         if ('point' and 'dist') in request.GET :
@@ -28,7 +28,7 @@ class PointInRadiusFilter(DistanceToPointFilter):
             return queryset
 
 
-class ListGisPOI(generics.ListCreateAPIView):
+class ListGisPOI(generics.ListCreateAPIView): # fixme: create view for creating new POI
     queryset = GisPOI_model.objects.all()
     serializer_class = NewGisPOISerializer
     pagination_class = CustomPagePagination

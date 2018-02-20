@@ -16,6 +16,7 @@ class ParentSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     #parent = ParentSerializer()
+
     class Meta:
         model = Category
         fields = (
@@ -44,6 +45,7 @@ class GisPOISerializer(GeoFeatureModelSerializer):
 
 
 class NewGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
+    # fixme: separate serializer for list of POI and creating new POI
     latitude = serializers.FloatField(write_only = True)
     longitude = serializers.FloatField(write_only = True)
     tags = TagListSerializerField()
@@ -61,7 +63,7 @@ class NewGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
             'tags',
             'latitude',
             'longitude',
-            'category'
+            'category' # fixme: make a normal transfer of the category field to the POI object
         )
     def validate(self, data):
         if not data.get('latitude') or not data.get('longitude'):

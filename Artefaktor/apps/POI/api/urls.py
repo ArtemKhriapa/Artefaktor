@@ -8,5 +8,6 @@ urlpatterns = [
     # format : ?name={}&description={} - filter on fields {name} and {description}
     # format : ?search={} - filter by {word}
     url(r'^id/(?P<POI_id>[0-9]+)/$', GisPOI.as_view()),
+    # fixme: create isolated url for creating new POI
 
 ]

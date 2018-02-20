@@ -12,6 +12,7 @@ class Category(MPTTModel):
     class Meta():
         db_table = 'category'
 
+    # fixme: create a normal category tree  with using fixtures
     SUPPORTED_UNITS = (
         ('main','main cat'),
         ('cat1','cat1'),
