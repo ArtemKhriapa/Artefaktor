@@ -40,6 +40,10 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['count'], 1)
 
     def test_new_poi_url(self):
+        response = self.c.get('/api/POI/new/')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_poi_url(self):
         response = self.c.get('/api/POI/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
