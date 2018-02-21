@@ -14,13 +14,30 @@ class Category(MPTTModel):
 
     # fixme: create a normal category tree  with using fixtures
     SUPPORTED_UNITS = (
-        ('main','main cat'),
-        ('cat1','cat1'),
-        ('cat2','cat2'),
-        ('1.1','sub cat1'),
-        ('1.2','sub cat2'),
-        ('2.1','sub_cat1'),
-        ('2.2','sub_cat2')
+        ('by interaction','by interaction'),
+        ('active (visit or take part in)','active (visit or take part in)'),
+        ('pasive (just look)','pasive (just look)'),
+        ('by type','by type'),
+        ('art and culture','art and culture'),
+        ('mass culture','mass culture'),
+        ('historical places','historical places'),
+        ('cultural heritage','cultural heritage'),
+        ('architecture','architecture'),
+        ('art','art'),
+        ('have fun or eating','have fun or eating'),
+        ('cinema','cinema'),
+        ('cafe, rerestaurant, pub','cafe, rerestaurant, pub'),
+        ('recreation','recreation'),
+        ('religion','religion'),
+        ('temples and churches','temples and churches'),
+        ('places of religious worship','places of religious worship'),
+        ('beautiful places','beautiful places'),
+        ('landscape','landscape'),
+        ('place','place'),
+        # ('',''),
+        # ('',''),
+        # ('',''),
+        # ('','')
     )
 
     name = models.CharField(max_length = 150,  choices= SUPPORTED_UNITS, verbose_name = 'Category')

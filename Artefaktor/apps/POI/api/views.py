@@ -51,12 +51,6 @@ class ListGisPOI(generics.ListAPIView): # fixme: create view for creating new PO
     filter_fields = ('name','description') # filter with 100% match in fields ?
     search_fields = ('name','description', 'addres') #search partial match in all of this fields ?
 
-
-    # def post(self, *args, **kwargs):
-    #     res = super().post(*args, **kwargs)
-    #     res.status_code == status.HTTP_201_CREATED
-    #     return res
-
     def get_queryset(self, *args, **kwargs):
         return GisPOI_model.objects.all()
 
