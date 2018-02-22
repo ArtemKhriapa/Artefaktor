@@ -6,7 +6,9 @@ urlpatterns = [
     # format : ?in_bbox={lat1,lon1,lat2,lon2}  - filter on two corner points(lat/lon)
     # format : ?dist={distance}&point={lat,lon} - filter in radius  on point(lat/lon) + distance in Km
     # format : ?name={}&description={} - filter on fields {name} and {description}
-    # format : ?search={} - filter by {word}
+    # format : ?search={word} - filter by {word}
+    # ?? isolated url for search? 
+    # ?? isolated url for filters? 
     url(r'^id/(?P<POI_id>[0-9]+)/$', GisPOI.as_view()),
     url(r'^new/$', NewGisPOI.as_view())
 
