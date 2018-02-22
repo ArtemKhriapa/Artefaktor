@@ -139,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 EMAIL_BACKEND = 'sgbackend.SendGridBackend'
-SENDGRID_API_KEY = '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'
+SENDGRID_API_KEY = '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'
 
 
 # Internationalization

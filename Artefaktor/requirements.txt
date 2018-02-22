@@ -4,4 +4,5 @@ django-filter==1.1.0
 djangorestframework==3.7.1
 social-auth-app-django==2.1.0
 djangorestframework-gis==0.12
+sendgrid-django==4.2
 
