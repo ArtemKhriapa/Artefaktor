@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from apps.POI.api.views import *
+from apps.POI.api.views import ListGisPOI, GisPOI, NewGisPOI
 
 urlpatterns = [
     url(r'^$', ListGisPOI.as_view()),

@@ -104,12 +104,12 @@ class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
 
 
 class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
-    # fixme: separate serializer for list of POI and creating new POI
     latitude = serializers.FloatField(write_only = True)
     longitude = serializers.FloatField(write_only = True)
     tags = TagListSerializerField()
     add_tags = serializers.CharField(write_only = True) # enter words separated by a coma+space
     category = CategorySerializer()
+
     class Meta:
         model = GisPOI
         geo_field = 'point'

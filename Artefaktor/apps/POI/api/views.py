@@ -5,7 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer, NewGisPOISerializer
 from apps.POI.models import GisPOI as GisPOI_model
 from rest_framework_gis.filters import InBBoxFilter
-from apps.filter.models import PointInRadiusFilter
+from apps.filter.models import PointInRadiusFilter, CategoryFilter
 
 
 class CustomPagePagination(PageNumberPagination):
@@ -34,7 +34,7 @@ class ListGisPOI(generics.ListAPIView):
     distance_filter_convert_meters = True
     bbox_filter_include_overlapping = True
     distanc_filter_include_overlapping = True
-    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, PointInRadiusFilter)#
+    filter_backends =(DjangoFilterBackend, filters.SearchFilter, InBBoxFilter, PointInRadiusFilter,CategoryFilter)#
     filter_fields = ('name','description') # filter with 100% match in fields ?
     search_fields = ('name','description', 'addres') #search partial match in all of this fields ?
 
