@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.POI',
     'apps.wallet',
     'apps.userauth',
+    'apps.DraftPoi',
 
     'apps.bonusshop.cart',
     'apps.bonusshop.catalog',
