@@ -26,6 +26,7 @@ class POITest(TestCase):
         )
         self.GisPOI.save()
         self.GisPOI.category.add(self.cat)
+        self.GisPOI.save()
 
     def test_get_POI_with_search(self):
         response = self.c.get('/api/POI/?search=test')
@@ -40,6 +41,58 @@ class POITest(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
+
+    def test_get_POI_in_box(self):
+
+        self.GisPOI = GisPOI.objects.create(
+            name ='test_poi',
+            addres = 'some addres',
+            description = 'description',
+            radius = 1,
+            extra_data = 'some data',
+            point = Point(10.5, 10.5)
+        )
+        self.GisPOI = GisPOI.objects.create(
+            name='test_poi',
+            addres='some addres',
+            description='description',
+            radius=1,
+            extra_data='some data',
+            point=Point(10.9999, 10.9999)
+        )
+        self.GisPOI = GisPOI.objects.create(
+            name='test_poi',
+            addres='some addres',
+            description='description',
+            radius=1,
+            extra_data='some data',
+            point=Point(11.1, 11.1)
+        )
+
+        response = self.c.get('/api/POI/?in_bbox={},{},{},{}'.format(10.0, 10.0, 11.0, 11.0))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 2)
+
+    def test_get_POI_in_radius(self):
+        self.GisPOI = GisPOI.objects.create(
+            name='test_poi',
+            addres='some addres',
+            description='description',
+            radius=1,
+            extra_data='some data',
+            point=Point(0, 0.01)
+        )
+
+        response = self.c.get('/api/POI/?dist={}&point={},{}'.format(1.199, 0.0, 0.0))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+
+    def test_get_POI_with_categories(self):
+        response = self.c.get('/api/POI/?cat={}'.format(self.cat.name))
+        # print(dump(response))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['results']['features'][0]['properties']['category'][0]['name'], self.cat.name)
 
     def test_new_poi_url(self):
         response = self.c.get('/api/POI/new/')
@@ -168,47 +221,3 @@ class POITest(TestCase):
         self.assertEqual(response.data['properties']['category'][0]['name'], self.cat.name)
         self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
-    def test_get_POI_in_box(self):
-
-        self.GisPOI = GisPOI.objects.create(
-            name ='test_poi',
-            addres = 'some addres',
-            description = 'description',
-            radius = 1,
-            extra_data = 'some data',
-            point = Point(10.5, 10.5)
-        )
-        self.GisPOI = GisPOI.objects.create(
-            name='test_poi',
-            addres='some addres',
-            description='description',
-            radius=1,
-            extra_data='some data',
-            point=Point(10.9999, 10.9999)
-        )
-        self.GisPOI = GisPOI.objects.create(
-            name='test_poi',
-            addres='some addres',
-            description='description',
-            radius=1,
-            extra_data='some data',
-            point=Point(11.1, 11.1)
-        )
-
-        response = self.c.get('/api/POI/?in_bbox={},{},{},{}'.format(10.0, 10.0, 11.0, 11.0))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 2)
-
-    def test_get_POI_in_radius(self):
-        self.GisPOI = GisPOI.objects.create(
-            name='test_poi',
-            addres='some addres',
-            description='description',
-            radius=1,
-            extra_data='some data',
-            point=Point(0, 0.01)
-        )
-
-        response = self.c.get('/api/POI/?dist={}&point={},{}'.format(1.199, 0.0, 0.0))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
