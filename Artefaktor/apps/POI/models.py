@@ -62,7 +62,7 @@ class GisPOI(modelsgis.Model):
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
     tags = TaggableManager()
-    category = modelsgis.ManyToManyField(Category,  blank=True, null=True, related_name='cat')
+    category = modelsgis.ManyToManyField(Category,  blank=True,  related_name='cat')#null=True,
 
     def __str__(self):
         return "ID: %s" % (self.id)

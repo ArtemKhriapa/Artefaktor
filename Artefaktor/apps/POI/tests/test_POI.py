@@ -12,7 +12,7 @@ class POITest(TestCase):
     lat = 44.444444
     lon = 55.555555
     def setUp(self):
-
+        self.point = Point(self.lat, self.lon)
         self.c = APIClient()
         self.cat = Category.objects.create(name = 'some_cat')
         self.GisPOI = GisPOI.objects.create(
@@ -21,8 +21,8 @@ class POITest(TestCase):
             description = 'description',
             radius = 1,
             extra_data = 'some data',
-            point = Point(self.lat, self.lon),
-            #category = self.cat
+            point = self.point,
+            #category = self.cat.id
         )
         self.GisPOI.save()
         self.GisPOI.category.add(self.cat)
@@ -116,7 +116,7 @@ class POITest(TestCase):
                     'add_tags' : 'qwerty',
                     'tags' : '',
                     #'category': '',
-                    'add_category' : 'some_cat'
+                    'category' : self.cat.id
                 }
         )
         #print(dump(response))
@@ -168,7 +168,7 @@ class POITest(TestCase):
                     'longitude': '180.0',
                     'add_tags' : 'qwerty',
                     'tags': '',
-                    'add_category' : 'some_cat'
+                    'category' : self.cat.id
                 }
         )
         #print(dump(response))
@@ -186,7 +186,7 @@ class POITest(TestCase):
                     'longitude': '180.1',
                     'add_tags' : 'qwerty',
                     'tags': '',
-                    'add_category' : 'some_cat'
+                    'category' : self.cat.id
                 }
         )
         #print(dump(response))
@@ -204,11 +204,11 @@ class POITest(TestCase):
                     'longitude': '80.0',
                     'add_tags' : 'qwerty',
                     'tags': '',
-                    'add_category' : 'wrongcategory',
+                    'category' : self.cat.id+99,
                 }
         )
         #print(dump(response))
-        self.assertEqual(response.data, ['Wrong categoty!']) # why it rise not dict?
+        self.assertEqual(response.data['category'][0], 'Invalid pk "{}" - object does not exist.'.format(self.cat.id+99)) # why it rise not dict?
 
     def test_get_POI(self):
         response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))

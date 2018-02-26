@@ -40,7 +40,7 @@ class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
     longitude = serializers.FloatField(write_only = True)
     tags = TagListSerializerField()
     add_tags = serializers.CharField(write_only = True) # enter words separated by a coma+space
-    add_category = serializers.CharField(write_only = True)
+    #add_category = serializers.CharField(write_only = True)
 
     class Meta:
         model = GisPOI
@@ -55,7 +55,7 @@ class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
             'tags',
             'latitude',
             'longitude',
-            'add_category',
+            #'add_category',
             'category'
         )
 
@@ -79,16 +79,21 @@ class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
             radius = validated_data['radius'],
         )
         newpoint.save()
-        for newtag in (validated_data['add_tags'].split(", ")):
+        #adding tags
+        for newtag in (validated_data['add_tags'].split(",")):
             newpoint.tags.add(newtag)
         #adding category
-        try:
-            newcategory = Category.objects.get(name = validated_data['add_category'])
-            newpoint.category.add(newcategory)
-            newpoint.save()
-        except Exception as e:
-            #print(e)
-            raise serializers.ValidationError("Wrong categoty!")  # why it rise not dict???
+        #try:
+            # print('valid:', validated_data['category'])
+            # newcategory_set = Category.objects.filter(validated_data['category'])
+            # print('set: ', newcategory_set)
+        # newcategory = Category.objects.get(name = validated_data['add_category'])
+        for category in validated_data['category']:
+            newpoint.category.add(category)
+        newpoint.save()
+        #except Exception as e:
+            # print(e)
+            #raise serializers.ValidationError("Wrong categoty!")  # why it rise not dict???
 
         newpoint.save()
         return newpoint
