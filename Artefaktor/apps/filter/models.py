@@ -21,6 +21,7 @@ class CategoryFilter(BaseFilterBackend):
     cat_param = 'cat'
 
     def get_filter_cat(self, request):
+        # get list categories
         cat_string = request.query_params.get(self.cat_param, None)
         if not cat_string:
             return None
@@ -29,20 +30,22 @@ class CategoryFilter(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
         if 'cat' in request.GET :
-            print('you ask me about: ',self.get_filter_cat(request))
             try:
-                q = Category.objects.get(name =self.get_filter_cat(request) ).get_descendants(include_self=True)
-                return q
+                # get set category
+                category_set = Category.objects.filter(name__in = self.get_filter_cat(request))
+                # get descendants of the object (include self)
+                descendants = category_set.get_descendants(include_self=True)
+                # get POIs from set of descendants
+                point_set = GisPOI.objects.filter(category__in = descendants)
+                # removing duplicates if POI associated with many categories
+                sort_point_set = []
+                for point in point_set:
+                    if point not in sort_point_set:
+                        sort_point_set.append(point)
+                return sort_point_set
+
             except Exception as e:
+                #print(e)
                 return queryset
         else:
             return queryset
-
-
-        #
-        #
-        #
-        # if 'cat' in request.GET :
-        #
-        #
-        #     return queryset

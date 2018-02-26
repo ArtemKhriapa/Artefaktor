@@ -5,19 +5,9 @@ from taggit_serializer.serializers import TagListSerializerField, TaggitSerializ
 from django.contrib.gis.geos import Point
 from rest_framework.validators import UniqueValidator
 
-'''
-class ParentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Category
-        fields = (
-            'name',
-        )
-'''
 
 class CategorySerializer(serializers.ModelSerializer):
     #parent = ParentSerializer()
-
     class Meta:
         model = Category
         fields = (
@@ -28,7 +18,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class GisPOISerializer(GeoFeatureModelSerializer):
     tags = TagListSerializerField()
-    category = CategorySerializer()
+    category = CategorySerializer(read_only=True, many=True)
     class Meta:
         model = GisPOI
         geo_field = 'point'
@@ -68,6 +58,7 @@ class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
             'add_category',
             'category'
         )
+
     def validate(self, data):
         if not data.get('latitude') or not data.get('longitude'):
             raise serializers.ValidationError("Please enter the coordinates.")
@@ -79,22 +70,22 @@ class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
 
     def create(self, validated_data):
         # transformation lat/lon in point format
-        point = Point(validated_data['latitude'], validated_data['longitude'] )
+        point = Point(validated_data['latitude'], validated_data['longitude'])
         newpoint = GisPOI.objects.create(
             name =validated_data.get('name'),
             point = point,
             description = validated_data['description'],
             addres = validated_data['addres'],
             radius = validated_data['radius'],
-
         )
-        # adding tags
+        newpoint.save()
         for newtag in (validated_data['add_tags'].split(", ")):
             newpoint.tags.add(newtag)
-        # adding category
+        #adding category
         try:
             newcategory = Category.objects.get(name = validated_data['add_category'])
-            newpoint.category = newcategory
+            newpoint.category.add(newcategory)
+            newpoint.save()
         except Exception as e:
             #print(e)
             raise serializers.ValidationError("Wrong categoty!")  # why it rise not dict???
@@ -108,7 +99,7 @@ class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
     longitude = serializers.FloatField(write_only = True)
     tags = TagListSerializerField()
     add_tags = serializers.CharField(write_only = True) # enter words separated by a coma+space
-    category = CategorySerializer()
+    category = CategorySerializer(read_only=True, many=True)
 
     class Meta:
         model = GisPOI

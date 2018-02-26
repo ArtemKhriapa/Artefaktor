@@ -8,7 +8,7 @@ from django.contrib.gis.geos import Point
 
 
 
-class RegisterTest(TestCase):
+class POITest(TestCase):
     lat = 44.444444
     lon = 55.555555
     def setUp(self):
@@ -22,8 +22,10 @@ class RegisterTest(TestCase):
             radius = 1,
             extra_data = 'some data',
             point = Point(self.lat, self.lon),
-            category = self.cat
+            #category = self.cat
         )
+        self.GisPOI.save()
+        self.GisPOI.category.add(self.cat)
 
     def test_get_POI_with_search(self):
         response = self.c.get('/api/POI/?search=test')
@@ -73,7 +75,7 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['geometry']['coordinates'], [33.3333,55.5555 ])
         self.assertEqual(response.data['properties']['tags'], ['qwerty'])
         category = Category.objects.get(name = 'some_cat')
-        self.assertEqual(response.data['properties']['category'], category.id)
+        self.assertEqual(response.data['properties']['category'], [category.id])
 
     def test_post_POI_validation_clear_data(self):
         # clear data
@@ -163,7 +165,7 @@ class RegisterTest(TestCase):
         self.assertEqual(response.data['properties']['name'], self.GisPOI.name)
         self.assertEqual(response.data['properties']['addres'], self.GisPOI.addres)
         self.assertEqual(response.data['properties']['radius'], self.GisPOI.radius)
-        self.assertEqual(response.data['properties']['category']['name'], self.GisPOI.category.name)
+        self.assertEqual(response.data['properties']['category'][0]['name'], self.cat.name)
         self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
     def test_get_POI_in_box(self):

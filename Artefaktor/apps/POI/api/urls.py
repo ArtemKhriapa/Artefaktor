@@ -7,6 +7,7 @@ urlpatterns = [
     # format : ?dist={distance}&point={lat,lon} - filter in radius  on point(lat/lon) + distance in Km
     # format : ?name={}&description={} - filter on fields {name} and {description}
     # format : ?search={word} - filter by {word}
+    # format : ?cat={category},{category},{category}.... - filter on category
     # ?? isolated url for search? 
     # ?? isolated url for filters? 
     url(r'^id/(?P<POI_id>[0-9]+)/$', GisPOI.as_view()),

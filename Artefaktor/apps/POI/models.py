@@ -36,12 +36,11 @@ class Category(MPTTModel):
         ('place','place'),
         # ('',''),
         # ('',''),
-        # ('',''),
         # ('','')
     )
 
-    name = models.CharField(max_length = 150,  choices= SUPPORTED_UNITS, verbose_name = 'Category')
-    parent = TreeForeignKey('self', null =True, blank = True, related_name = 'CHILD', verbose_name='PARENT')
+    name = models.CharField(max_length = 150, )#choices= SUPPORTED_UNITS
+    parent = TreeForeignKey('self', null =True, blank = True, related_name = 'Category')
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -63,7 +62,7 @@ class GisPOI(modelsgis.Model):
     image = modelsgis.ImageField(null = True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null = True, blank=True)
     tags = TaggableManager()
-    category = TreeForeignKey(Category,  blank=True, null=True, related_name='cat') #is this may be clear?
+    category = modelsgis.ManyToManyField(Category,  blank=True, null=True, related_name='cat')
 
     def __str__(self):
         return "ID: %s" % (self.id)
