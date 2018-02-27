@@ -32,7 +32,7 @@ class CategoryFilter(BaseFilterBackend):
         if 'cat' in request.GET :
             try:
                 # get set category
-                category_set = Category.objects.filter(name__in = self.get_filter_cat(request))
+                category_set = Category.objects.filter(slug__in = self.get_filter_cat(request))
                 # get descendants of the object (include self)
                 descendants = category_set.get_descendants(include_self=True)
                 # get POIs from set of descendants

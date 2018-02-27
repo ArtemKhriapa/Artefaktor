@@ -40,6 +40,7 @@ class Category(MPTTModel):
     )
 
     name = models.CharField(max_length = 150, )#choices= SUPPORTED_UNITS
+    slug = modelsgis.SlugField(null=True, unique=True, max_length=25)#
     parent = TreeForeignKey('self', null =True, blank = True, related_name = 'Category')
 
     class MPTTMeta:

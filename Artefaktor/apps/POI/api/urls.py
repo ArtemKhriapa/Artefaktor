@@ -7,7 +7,7 @@ urlpatterns = [
     # format : ?dist={distance}&point={lat,lon} - filter in radius  on point(lat/lon) + distance in Km
     # format : ?name={}&description={} - filter on fields {name} and {description}
     # format : ?search={word} - search by {word}
-    # format : ?cat={category},{category},{category}.... - filter on category
+    # format : ?cat={slug},{slug},{slug}.... - filter on category by slug
     #FIXME ?? isolated url for search?
     #FIXME ?? isolated url for filters?
     url(r'^cat/$',ListCategoryView.as_view()),
