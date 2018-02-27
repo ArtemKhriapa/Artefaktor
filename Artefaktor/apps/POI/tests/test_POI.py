@@ -13,7 +13,10 @@ class POITest(TestCase):
     def setUp(self):
         self.point = Point(self.lat, self.lon)
         self.c = APIClient()
-        self.cat = Category.objects.create(name = 'some_cat')
+
+        self.cat = Category.objects.create(name = 'some_cat', slug = 'sc')
+        self.cat.save()
+
         self.GisPOI = GisPOI.objects.create(
             name ='test_poi',
             addres = 'some addres',
@@ -87,7 +90,7 @@ class POITest(TestCase):
         self.assertEqual(response.data['count'], 1)
 
     def test_get_POI_with_categories(self):
-        response = self.c.get('/api/POI/?cat={}'.format(self.cat.name))
+        response = self.c.get('/api/POI/?cat={}'.format(self.cat.slug))
         # print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
@@ -222,6 +225,12 @@ class POITest(TestCase):
 
     def test_get_category_list(self):
         response = self.c.get('/api/POI/cat/')
+        #print(dump(response))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'][0]['name'], self.cat.name)
+
+    def test_get_category_with_search(self):
+        response = self.c.get('/api/POI/cat/?search={}'.format(self.cat.name))
         #print(dump(response))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['results'][0]['name'], self.cat.name)
