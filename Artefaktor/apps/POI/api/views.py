@@ -27,7 +27,7 @@ class NewGisPOIView(generics.CreateAPIView):
 
 
 class ListGisPOIView(generics.ListAPIView):
-    queryset = GisPOI_model.objects.all()
+    queryset = GisPOI_model.objects.all().order_by('id') # sorted by id ?
     serializer_class = ListGisPOISerializer
     pagination_class = CustomPagePagination
     bbox_filter_field = 'point'
@@ -39,8 +39,8 @@ class ListGisPOIView(generics.ListAPIView):
     filter_fields = ('name','description') # filter with 100% match in fields ?
     search_fields = ('name','description', 'addres') #search partial match in all of this fields ?
 
-    def get_queryset(self, *args, **kwargs):
-        return GisPOI_model.objects.all()
+    # def get_queryset(self, *args, **kwargs):
+    #     return GisPOI_model.objects.all()
 
 
 class GisPOIView(generics.RetrieveAPIView):
@@ -52,8 +52,8 @@ class GisPOIView(generics.RetrieveAPIView):
 
 
 class ListCategoryView(generics.ListAPIView):
-    queryset = Category_model.objects.all()
+    queryset = Category_model.objects.all().order_by('id')
     serializer_class = CategorySerializer
-    filter_backends = (DjangoFilterBackend,filters.SearchFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     pagination_class = CustomPagePagination
-    search_fields = ('name')
+    search_fields = ('name','id') # why filter breaks down if one field ??

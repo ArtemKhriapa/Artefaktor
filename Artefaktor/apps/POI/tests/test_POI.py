@@ -5,8 +5,7 @@ from rest_framework import status
 from utils.helpers_for_tests import dump, create_user
 from apps.POI.models import GisPOI, Category
 from django.contrib.gis.geos import Point
-
-
+from django.core.management import call_command #  call_command('loaddata', 'myapp')
 
 class POITest(TestCase):
     lat = 44.444444
