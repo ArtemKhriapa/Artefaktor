@@ -121,3 +121,5 @@ class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
             'longitude',
             'category'
         )
+
+

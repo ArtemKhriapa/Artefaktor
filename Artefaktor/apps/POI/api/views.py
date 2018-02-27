@@ -2,20 +2,21 @@ from rest_framework import generics, status, filters
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer, NewGisPOISerializer
+from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer, NewGisPOISerializer, CategorySerializer
 from apps.POI.models import GisPOI as GisPOI_model
+from apps.POI.models import Category as Category_model
 from rest_framework_gis.filters import InBBoxFilter
 from apps.filter.models import PointInRadiusFilter, CategoryFilter
 
 
 class CustomPagePagination(PageNumberPagination):
     #class for set pagination parameters
-    page_size = 4 #obj in page
+    page_size = 10 #obj in page
     page_size_query_param = 'page_size'
-    max_page_size = 7
+    max_page_size = 10
 
 
-class NewGisPOI(generics.CreateAPIView):
+class NewGisPOIView(generics.CreateAPIView):
     queryset = GisPOI_model.objects.all()
     serializer_class = NewGisPOISerializer
 
@@ -25,7 +26,7 @@ class NewGisPOI(generics.CreateAPIView):
             return res
 
 
-class ListGisPOI(generics.ListAPIView): 
+class ListGisPOIView(generics.ListAPIView):
     queryset = GisPOI_model.objects.all()
     serializer_class = ListGisPOISerializer
     pagination_class = CustomPagePagination
@@ -42,9 +43,17 @@ class ListGisPOI(generics.ListAPIView):
         return GisPOI_model.objects.all()
 
 
-class GisPOI(generics.RetrieveAPIView):
+class GisPOIView(generics.RetrieveAPIView):
     queryset = GisPOI_model.objects.all()
     serializer_class = GisPOISerializer
 
     def get_object(self):
         return get_object_or_404(GisPOI_model, id=self.kwargs.get('POI_id'))
+
+
+class ListCategoryView(generics.ListAPIView):
+    queryset = Category_model.objects.all()
+    serializer_class = CategorySerializer
+    filter_backends = (DjangoFilterBackend,filters.SearchFilter)
+    pagination_class = CustomPagePagination
+    search_fields = ('name')

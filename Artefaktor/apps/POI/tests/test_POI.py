@@ -221,3 +221,8 @@ class POITest(TestCase):
         self.assertEqual(response.data['properties']['category'][0]['name'], self.cat.name)
         self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
+    def test_get_category_list(self):
+        response = self.c.get('/api/POI/cat/')
+        #print(dump(response))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'][0]['name'], self.cat.name)
