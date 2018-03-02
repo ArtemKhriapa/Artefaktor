@@ -34,3 +34,4 @@ class RegistrationTry(models.Model):
             self.otc = new_otc
             # somewhere in this place send link (OTC.link) to self.user_email
         return super().save(*args, **kwargs)
+

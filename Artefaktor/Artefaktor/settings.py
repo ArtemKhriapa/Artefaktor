@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.wallet',
     'apps.userauth',
     'apps.filter',
+    'apps.DraftPoi',
 
     'apps.bonusshop.cart',
     'apps.bonusshop.catalog',
@@ -142,12 +143,9 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+EMAIL_BACKEND = 'sgbackend.SendGridBackend'
+SENDGRID_API_KEY = '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'
 
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.live.com'
-EMAIL_HOST_USER = 'no_reply_art@outlook.com'
-EMAIL_HOST_PASSWORD = 'Pyaug12345'#should work SMTP mail
-EMAIL_PORT = 465
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
