@@ -4,6 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer, NewGisPOISerializer, CategorySerializer
 from apps.POI.models import GisPOI as GisPOI_model
+from apps.POI.models import DraftGisPOI as DraftGisPOI_model
 from apps.POI.models import Category as Category_model
 from rest_framework_gis.filters import InBBoxFilter
 from apps.filter.models import PointInRadiusFilter, CategoryFilter
@@ -17,7 +18,7 @@ class CustomPagePagination(PageNumberPagination):
 
 
 class NewGisPOIView(generics.CreateAPIView):
-    queryset = GisPOI_model.objects.all()
+    queryset = DraftGisPOI_model.objects.all()
     serializer_class = NewGisPOISerializer
 
     def post(self, *args, **kwargs):

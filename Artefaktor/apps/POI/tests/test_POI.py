@@ -3,7 +3,7 @@ from django.utils import timezone
 from rest_framework.test import APIClient
 from rest_framework import status
 from utils.helpers_for_tests import dump, create_user
-from apps.POI.models import GisPOI, Category
+from apps.POI.models import GisPOI, DraftGisPOI, Category
 from django.contrib.gis.geos import Point
 from django.core.management import call_command #  call_command('loaddata', 'myapp')
 
@@ -96,15 +96,38 @@ class POITest(TestCase):
         self.assertEqual(response.data['count'], 1)
         self.assertEqual(response.data['results']['features'][0]['properties']['category'][0]['name'], self.cat.name)
 
-    def test_new_poi_url(self):
+    def test_get_new_poi_url(self):
         response = self.c.get('/api/POI/new/')
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
-    def test_poi_url(self):
+    def test_get_poi_url(self):
         response = self.c.get('/api/POI/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_post_POI(self):
+    def test_get_POI(self):
+        response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))
+        # print(dump(response))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['properties']['description'], self.GisPOI.description)
+        self.assertEqual(response.data['properties']['name'], self.GisPOI.name)
+        self.assertEqual(response.data['properties']['addres'], self.GisPOI.addres)
+        self.assertEqual(response.data['properties']['radius'], self.GisPOI.radius)
+        self.assertEqual(response.data['properties']['category'][0]['name'], self.cat.name)
+        self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
+
+    def test_get_category_list(self):
+        response = self.c.get('/api/POI/cat/')
+        #print(dump(response))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'][0]['name'], self.cat.name)
+
+    def test_get_category_with_search(self):
+        response = self.c.get('/api/POI/cat/?search={}'.format(self.cat.name))
+        #print(dump(response))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'][0]['name'], self.cat.name)
+
+    def test_post_DraftPOI(self):
         response = self.c.post(
             '/api/POI/new/',
                 data = {
@@ -132,7 +155,7 @@ class POITest(TestCase):
         category = Category.objects.get(name = 'some_cat')
         self.assertEqual(response.data['properties']['category'], [category.id])
 
-    def test_post_POI_validation_clear_data(self):
+    def test_post_DraftPOI_validation_clear_data(self):
         # clear data
         response = self.c.post(
             '/api/POI/new/',
@@ -157,7 +180,7 @@ class POITest(TestCase):
         self.assertEqual(response.data['latitude'], ['A valid number is required.'])
         self.assertEqual(response.data['add_tags'], ['This field may not be blank.'])
         
-    def test_post_POI_validation_wrong_data(self):
+    def test_post_DraftPOI_validation_wrong_data(self):
         response = self.c.post(
             '/api/POI/new/',
                 data={
@@ -212,25 +235,4 @@ class POITest(TestCase):
         #print(dump(response))
         self.assertEqual(response.data['category'][0], 'Invalid pk "{}" - object does not exist.'.format(self.cat.id+99)) # why it rise not dict?
 
-    def test_get_POI(self):
-        response = self.c.get('/api/POI/id/{}/'.format(self.GisPOI.id))
-        #print(dump(response))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['properties']['description'], self.GisPOI.description)
-        self.assertEqual(response.data['properties']['name'], self.GisPOI.name)
-        self.assertEqual(response.data['properties']['addres'], self.GisPOI.addres)
-        self.assertEqual(response.data['properties']['radius'], self.GisPOI.radius)
-        self.assertEqual(response.data['properties']['category'][0]['name'], self.cat.name)
-        self.assertEqual(response.data['geometry']['coordinates'], [self.lat, self.lon])
 
-    def test_get_category_list(self):
-        response = self.c.get('/api/POI/cat/')
-        #print(dump(response))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['results'][0]['name'], self.cat.name)
-
-    def test_get_category_with_search(self):
-        response = self.c.get('/api/POI/cat/?search={}'.format(self.cat.name))
-        #print(dump(response))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['results'][0]['name'], self.cat.name)
