@@ -2,7 +2,8 @@ from rest_framework import generics, status, filters
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer, NewGisPOISerializer, CategorySerializer
+from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer
+from apps.POI.api.serializers  import NewDraftGisPOISerializer, CategorySerializer
 from apps.POI.models import GisPOI as GisPOI_model
 from apps.POI.models import DraftGisPOI as DraftGisPOI_model
 from apps.POI.models import Category as Category_model
@@ -17,9 +18,9 @@ class CustomPagePagination(PageNumberPagination):
     max_page_size = 10
 
 
-class NewGisPOIView(generics.CreateAPIView):
+class NewDraftGisPOIView(generics.CreateAPIView):
     queryset = DraftGisPOI_model.objects.all()
-    serializer_class = NewGisPOISerializer
+    serializer_class = NewDraftGisPOISerializer
 
     def post(self, *args, **kwargs):
             res = super().post(*args, **kwargs)

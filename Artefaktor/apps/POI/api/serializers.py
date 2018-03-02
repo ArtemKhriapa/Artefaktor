@@ -35,7 +35,7 @@ class GisPOISerializer(GeoFeatureModelSerializer):
         )
 
 
-class NewGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
+class NewDraftGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
     latitude = serializers.FloatField(write_only = True)
     longitude = serializers.FloatField(write_only = True)
     tags = TagListSerializerField()

@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from apps.POI.api.views import ListGisPOIView, GisPOIView, NewGisPOIView, ListCategoryView
+from apps.POI.api.views import ListGisPOIView, GisPOIView, NewDraftGisPOIView, ListCategoryView
 
 urlpatterns = [
     url(r'^$', ListGisPOIView.as_view()),
@@ -13,6 +13,6 @@ urlpatterns = [
     url(r'^cat/$',ListCategoryView.as_view()),
     # format : ?search={word} - search by {word} in name
     url(r'^id/(?P<POI_id>[0-9]+)/$', GisPOIView.as_view()),
-    url(r'^new/$', NewGisPOIView.as_view())
+    url(r'^new/$', NewDraftGisPOIView.as_view()) # create new DraftGisPoi
 
 ]

@@ -16,7 +16,7 @@ make_poi.short_description = "Approve DraftPOI as POI" # description for action 
 
 
 class DraftGisPOIAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'description']
+    list_display = ['id', 'name', 'description', 'is_moderate']
     actions = [make_poi]
 
 
