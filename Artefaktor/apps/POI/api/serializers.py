@@ -114,17 +114,12 @@ class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
             'category'
         )
 
-# class ElasticGisPOISerializer(ElasticModelSerializer):
-#
-#     class Meta:
-#             model = GisPOI
-#             es_model = GisPOIIndex
-#             fields = ('pk', 'description', 'tags')
-
 
 class ListESSerializer(ElasticModelSerializer):
+    tags = TagListSerializerField()
+    #point = GisPOISerializer
 
     class Meta:
         model = GisPOI
         es_model = GisPOIIndex
-        fields = ('description', 'name')#, 'tags'
+        fields = ('name','description', 'tags')

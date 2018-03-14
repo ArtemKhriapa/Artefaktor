@@ -1,5 +1,5 @@
 from elasticsearch_dsl.connections import connections
-from elasticsearch_dsl import DocType, Text , Keyword #Date
+from elasticsearch_dsl import DocType, Text ,Integer, Date # Keyword #
 from elasticsearch.helpers import bulk
 from elasticsearch import Elasticsearch
 
@@ -10,7 +10,8 @@ connections.create_connection()
 
 class GisPOIIndex(DocType):
     #author = Text()
-    #posted_date = Date()
+    #date = Date()
+    #id = Integer()
     description = Text()
     name = Text()
    # tags = Keyword(multi=True)

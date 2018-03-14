@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer
-from apps.POI.api.serializers  import NewDraftGisPOISerializer, CategorySerializer #, ElasticGisPOISerializer
+from apps.POI.api.serializers  import NewDraftGisPOISerializer, CategorySerializer ,ListESSerializer
 from apps.POI.models import GisPOI as GisPOI_model
 from apps.POI.models import DraftGisPOI as DraftGisPOI_model
 from apps.POI.models import Category as Category_model
@@ -66,12 +66,10 @@ class ListCategoryView(generics.ListAPIView):
 
 class GisPOIESView(es_views.ListElasticAPIView):
     #print('in ESView')
+    #serializer_class = GisPOISerializer#ListESSerializer
     es_client = Elasticsearch(hosts=['http://localhost:9200/'],connection_class=RequestsHttpConnection)
     es_model = GisPOIIndex
     es_filter_backends = (es_filters.ElasticFieldsFilter, es_filters.ElasticSearchFilter)
     es_filter_fields = (es_filters.ESFieldFilter('tag', 'tags'),)
-    es_search_fields = (
-        'name',
-        'description',
-    )
+    es_search_fields = ('name','description',)
 

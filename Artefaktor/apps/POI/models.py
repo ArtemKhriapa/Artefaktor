@@ -58,10 +58,11 @@ class GisPOI(DraftGisPOI):
         print('indexing')
         obj = GisPOIIndex(
             meta={'id': self.id},
+            #id = self.id,
             name=self.name,
             #posted_date=self.posted_date,
             description=self.description,
-            #tags=self.tags
+            date=self.create_in
         )
         print(obj.name, obj.description)
         obj.save()
