@@ -3,12 +3,15 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 from apps.POI.api.serializers  import  GisPOISerializer, ListGisPOISerializer
-from apps.POI.api.serializers  import NewDraftGisPOISerializer, CategorySerializer
+from apps.POI.api.serializers  import NewDraftGisPOISerializer, CategorySerializer #, ElasticGisPOISerializer
 from apps.POI.models import GisPOI as GisPOI_model
 from apps.POI.models import DraftGisPOI as DraftGisPOI_model
 from apps.POI.models import Category as Category_model
 from rest_framework_gis.filters import InBBoxFilter
 from apps.filter.models import PointInRadiusFilter, CategoryFilter
+from elasticsearch import Elasticsearch, RequestsHttpConnection
+from rest_framework_elasticsearch import es_views, es_pagination, es_filters
+from apps.POI.esearch import GisPOIIndex
 
 
 class CustomPagePagination(PageNumberPagination):
@@ -59,3 +62,16 @@ class ListCategoryView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
     pagination_class = CustomPagePagination
     search_fields = ('name','id') # why filter breaks down if one field ??
+
+
+class GisPOIESView(es_views.ListElasticAPIView):
+    #print('in ESView')
+    es_client = Elasticsearch(hosts=['http://localhost:9200/'],connection_class=RequestsHttpConnection)
+    es_model = GisPOIIndex
+    es_filter_backends = (es_filters.ElasticFieldsFilter, es_filters.ElasticSearchFilter)
+    es_filter_fields = (es_filters.ESFieldFilter('tag', 'tags'),)
+    es_search_fields = (
+        'name',
+        'description',
+    )
+

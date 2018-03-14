@@ -3,9 +3,9 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models as modelsgis
 from taggit.managers import TaggableManager
-
 from mptt.models import MPTTModel, TreeForeignKey
 import mptt
+from apps.POI.esearch import GisPOIIndex
 
 class Category(MPTTModel):
 
@@ -21,6 +21,7 @@ class Category(MPTTModel):
 
     def __str__(self):
             return "-- %s" % (self.name)
+
 
 mptt.register(Category,)
 
@@ -53,4 +54,15 @@ class GisPOI(DraftGisPOI):
     def __str__(self):
         return "ID: %s" % (self.id)
 
-
+    def indexing(self):
+        print('indexing')
+        obj = GisPOIIndex(
+            meta={'id': self.id},
+            name=self.name,
+            #posted_date=self.posted_date,
+            description=self.description,
+            #tags=self.tags
+        )
+        print(obj.name, obj.description)
+        obj.save()
+        return obj.to_dict(include_meta=True)

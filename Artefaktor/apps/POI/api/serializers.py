@@ -4,7 +4,8 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from taggit_serializer.serializers import TagListSerializerField, TaggitSerializer
 from django.contrib.gis.geos import Point
 from rest_framework.validators import UniqueValidator
-
+from rest_framework_elasticsearch.es_serializer import ElasticModelSerializer
+from apps.POI.esearch import GisPOIIndex
 
 class CategorySerializer(serializers.ModelSerializer):
     #parent = ParentSerializer()
@@ -113,4 +114,17 @@ class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
             'category'
         )
 
+# class ElasticGisPOISerializer(ElasticModelSerializer):
+#
+#     class Meta:
+#             model = GisPOI
+#             es_model = GisPOIIndex
+#             fields = ('pk', 'description', 'tags')
 
+
+class ListESSerializer(ElasticModelSerializer):
+
+    class Meta:
+        model = GisPOI
+        es_model = GisPOIIndex
+        fields = ('description', 'name')#, 'tags'
