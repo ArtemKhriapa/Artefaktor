@@ -18,8 +18,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class GisPOISerializer(GeoFeatureModelSerializer):
+
     tags = TagListSerializerField()
     category = CategorySerializer(read_only=True, many=True)
+
     class Meta:
         model = GisPOI
         geo_field = 'point'

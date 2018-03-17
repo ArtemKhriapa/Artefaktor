@@ -7,7 +7,7 @@ urlpatterns = [
     # format : ?dist={distance}&point={lat,lon} - filter in radius  on point(lat/lon) + distance in Km
     # format : ?name={}&description={} - filter on fields {name} and {description}
     # format : ?search={word} - search by {word}
-    # format : ?cat={slug},{slug},{slug}.... - filter on category by slug
+    # format : ?cat={slug},{slug},{slug}.... - filter on category by slug (Category filter)
     url(r'^esearch/$', GisPOIESView.as_view()), # with ElasticSearch
     # format :
     url(r'^cat/$',ListCategoryView.as_view()),
