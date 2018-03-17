@@ -9,9 +9,8 @@ from . import models
 connections.create_connection()
 
 class GisPOIIndex(DocType):
-    #author = Text()
-    #date = Date()
-    #id = Integer()
+    pk = Integer()
+    date = Date()
     description = Text()
     name = Text()
    # tags = Keyword(multi=True)
