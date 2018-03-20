@@ -25,30 +25,34 @@ class Category(MPTTModel):
 
 mptt.register(Category,)
 
-
-class DraftGisPOI(modelsgis.Model):
+class BaseGisPOI(modelsgis.Model):
 
     name = modelsgis.CharField(max_length=300)
     point = modelsgis.PointField(geography=True, null=True, blank=True)
     addres = modelsgis.TextField(null=True, blank=True)
     description = modelsgis.TextField()
     create_in = modelsgis.DateTimeField(auto_now_add=True)
-    created_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True)
-    radius = modelsgis.PositiveIntegerField(default=0, blank=True)  # radius of POI in meters. fol localization near large  geo-objects
+    radius = modelsgis.PositiveIntegerField(default=0,
+                                            blank=True)  # radius of POI in meters. fol localization near large  geo-objects
     image = modelsgis.ImageField(null=True, blank=True)  #:FIXME -- how it works??
     extra_data = modelsgis.TextField(null=True, blank=True)
     tags = TaggableManager()
-    category = modelsgis.ManyToManyField(Category, blank=True, related_name='cat')  # null=True,
     is_moderate = models.BooleanField(default=False)
 
-    # class Meta:
-    #     abstract = True
+    class Meta:
+        abstract = True
+
+
+class DraftGisPOI(BaseGisPOI):
+    category = modelsgis.ManyToManyField(Category, blank=True, related_name='cat')  # null=True,
+    created_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return "ID: %s" % (self.id)
 
 
-class GisPOI(DraftGisPOI):
+class GisPOI(BaseGisPOI):
 
     moderated_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True)
     moderation_on = models.DateField(null=True, blank=True, auto_now_add=True)
