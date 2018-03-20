@@ -41,6 +41,9 @@ class DraftGisPOI(modelsgis.Model):
     category = modelsgis.ManyToManyField(Category, blank=True, related_name='cat')  # null=True,
     is_moderate = models.BooleanField(default=False)
 
+    # class Meta:
+    #     abstract = True
+
     def __str__(self):
         return "ID: %s" % (self.id)
 
@@ -55,7 +58,7 @@ class GisPOI(DraftGisPOI):
         return "ID: %s" % (self.id)
 
     def indexing(self):
-        print('indexing')
+        # print('indexing')
         obj = GisPOIIndex(
             meta={'id': self.id},
             pk = self.id,
@@ -64,6 +67,6 @@ class GisPOI(DraftGisPOI):
             description=self.description,
             date=self.create_in
         )
-        print(obj.name, obj.description)
+        # print(obj.name, obj.description)
         obj.save()
         return obj.to_dict(include_meta=True)

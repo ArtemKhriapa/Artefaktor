@@ -49,13 +49,11 @@ INSTALLED_APPS = [
 
     'api',
     'apps.artefact',
-    'apps.incubator',
     'apps.layar',
     'apps.POI',
     'apps.wallet',
     'apps.userauth',
     'apps.filter',
-    'apps.DraftPoi',
 
     'apps.bonusshop.cart',
     'apps.bonusshop.catalog',

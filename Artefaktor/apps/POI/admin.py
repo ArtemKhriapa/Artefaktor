@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import  GisPOI, DraftGisPOI ,Category
 from django_mptt_admin.admin import DjangoMpttAdmin
-from mptt.admin import MPTTModelAdmin
+from .signals import create_draft_poi #signal for creating POI
+# from mptt.admin import MPTTModelAdmin
 
 class CategoryAdmin(DjangoMpttAdmin):
     pass
