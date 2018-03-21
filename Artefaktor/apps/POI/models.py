@@ -9,7 +9,7 @@ from apps.POI.esearch import GisPOIIndex
 
 
 class Category(MPTTModel):
-    class Meta():
+    class Meta:
         db_table = 'category'
 
     name = models.CharField(max_length=150)
@@ -32,7 +32,7 @@ class BaseGisPOI(modelsgis.Model):
     addres = modelsgis.TextField(null=True, blank=True)
     description = modelsgis.TextField()
     create_in = modelsgis.DateTimeField(auto_now_add=True)
-    radius = modelsgis.PositiveIntegerField(default=0,blank=True)
+    radius = modelsgis.PositiveIntegerField(default=0, blank=True)
     image = modelsgis.ImageField(null=True, blank=True)
     extra_data = modelsgis.TextField(null=True, blank=True)
     tags = TaggableManager()
@@ -51,7 +51,8 @@ class DraftGisPOI(BaseGisPOI):
 
 
 class GisPOI(BaseGisPOI):
-    created_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL,null=True,blank=True,related_name='cratedpoi')
+    created_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True,
+                                       related_name='cratedpoi')
     category = modelsgis.ManyToManyField(Category, blank=True, related_name='poi')
     moderated_was = modelsgis.ForeignKey(User, on_delete=modelsgis.SET_NULL, null=True, blank=True)
     moderation_on = models.DateField(null=True, blank=True, auto_now_add=True)

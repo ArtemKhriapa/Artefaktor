@@ -120,7 +120,6 @@ class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
 class ListESSerializer(ElasticModelSerializer):
     tags = TagListSerializerField()
     #point = GisPOISerializer
-
     class Meta:
         #model = GisPOI
         es_model = GisPOIIndex
