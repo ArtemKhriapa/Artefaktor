@@ -65,11 +65,12 @@ class ListCategoryView(generics.ListAPIView):
 
 
 class GisPOIESView(es_views.ListElasticAPIView):
-    #print('in ESView')
-    #serializer_class = GisPOISerializer#ListESSerializer
+    # serializer_class = ListGisPOISerializer
     es_client = Elasticsearch(hosts=['http://localhost:9200/'],connection_class=RequestsHttpConnection)
     es_model = GisPOIIndex
     es_filter_backends = (es_filters.ElasticFieldsFilter, es_filters.ElasticSearchFilter)
-    es_filter_fields = (es_filters.ESFieldFilter('tag', 'tags'),)
+    # es_filter_fields = (es_filters.ESFieldFilter('tag', 'tags'),)
     es_search_fields = ('name','description',)
+
+
 

@@ -9,18 +9,20 @@ from . import models
 connections.create_connection()
 
 class GisPOIIndex(DocType):
-    pk = Integer()
+    id = Integer()
     date = Date()
     description = Text()
     name = Text()
-   # tags = Keyword(multi=True)
 
     class Meta:
-        index = 'gis-index'
+        index = 'poi_index'
 
 GisPOIIndex.init()
 
 
 def bulk_indexing():
     es = Elasticsearch()
+    es.indices.delete(index='poi_index', ignore=[400, 404])
+    es.indices.create(index='poi_index', ignore=[400])
+    GisPOIIndex.init()
     bulk(client=es, actions=(b.indexing() for b in models.GisPOI.objects.all().iterator()))

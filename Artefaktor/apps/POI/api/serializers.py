@@ -122,6 +122,6 @@ class ListESSerializer(ElasticModelSerializer):
     #point = GisPOISerializer
 
     class Meta:
-        model = GisPOI
+        #model = GisPOI
         es_model = GisPOIIndex
-        fields = ('name','description', 'tags')
+        fields = ('id','date','name','description')

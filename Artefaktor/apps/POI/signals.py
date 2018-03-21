@@ -21,6 +21,6 @@ from apps.POI.models  import GisPOI, DraftGisPOI
 @receiver(post_save, sender=GisPOI)
 def create_draft_poi( instance, *args, **kwargs):
     GisPOI.indexing(instance)
-    print('something saved')
+    # print('something saved')
 #
 # post_save.connect(create_draft_poi, sender=DraftGisPOI)
