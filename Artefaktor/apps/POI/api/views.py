@@ -66,16 +66,24 @@ class ListCategoryView(generics.ListAPIView):
 
 class GisPOIESView(es_views.ListElasticAPIView):
     print('in view')
-    #serializer_class = ListGisPOISerializer
+    serializer_class = ListGisPOISerializer
     es_client = Elasticsearch(hosts=['http://localhost:9200/'],connection_class=RequestsHttpConnection)
     es_model = GisPOIIndex
     es_filter_backends = (es_filters.ElasticFieldsFilter, es_filters.ElasticSearchFilter)
     es_search_fields = ('name','description',)
 
-    def get_queryset(self,*args, **kwargs):
-        print('in get QS')
-        indxs = super().get_queryset(*args, **kwargs)
-        print('--------------->',indxs)
-        objs = GisPOI_model.objects.filter(pk__in=[i.obj_id for i in indxs])
-        print('heere -----------', objs)
-        return objs
+    def get_queryset(self, *args, **kwargs):
+        # print('in get QS')
+        #indxs = super().get_queryset(self, *args, **kwargs)
+        # indxs  = self.es_representation(self.do_search(self))
+        # print('--------------->',indxs)
+        # objs = GisPOI_model.objects.filter(pk__in=[i.obj_id for i in indxs])
+        # print('heere -----------', objs)
+        search= self.do_search()
+        return self.es_representation(search) #print('olololo')#objs
+
+    def do_search(self):
+        search =super().do_search()
+        objs = GisPOI_model.objects.filter(pk__in=[i.id for i in search])
+        print(objs) # !YES, it's POIs!!!!!!!!!!!!!!!!!
+        return objs# search
