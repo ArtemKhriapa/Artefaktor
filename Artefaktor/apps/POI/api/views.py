@@ -12,7 +12,7 @@ from apps.filter.models import PointInRadiusFilter, CategoryFilter
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from rest_framework_elasticsearch import es_views, es_pagination, es_filters
 from apps.POI.esearch import GisPOIIndex
-
+from rest_framework.response import Response
 
 class CustomPagePagination(PageNumberPagination):
     #class for set pagination parameters
@@ -72,18 +72,27 @@ class GisPOIESView(es_views.ListElasticAPIView):
     es_filter_backends = (es_filters.ElasticFieldsFilter, es_filters.ElasticSearchFilter)
     es_search_fields = ('name','description',)
 
-    def get_queryset(self, *args, **kwargs):
-        # print('in get QS')
-        #indxs = super().get_queryset(self, *args, **kwargs)
-        # indxs  = self.es_representation(self.do_search(self))
-        # print('--------------->',indxs)
-        # objs = GisPOI_model.objects.filter(pk__in=[i.obj_id for i in indxs])
-        # print('heere -----------', objs)
-        search= self.do_search()
-        return self.es_representation(search) #print('olololo')#objs
 
     def do_search(self):
         search =super().do_search()
         objs = GisPOI_model.objects.filter(pk__in=[i.id for i in search])
-        print(objs) # !YES, it's POIs!!!!!!!!!!!!!!!!!
-        return objs# search
+        # print(objs,"!YES, it's POIs!!!!!!!!!!!!!!!!!") # !YES, it's POIs!!!!!!!!!!!!!!!!!
+        return  search #, objs
+
+    def get_queryset(self, *args, **kwargs):
+        # print('in get QS')
+        indxs = super().get_queryset()
+        # print('--------------->',indxs)
+        objs = GisPOI_model.objects.filter(pk__in=[i['id'] for i in indxs])
+        # print('heere -----------', objs)
+        return objs
+
+    def get(self, request, *args, **kwargs):
+        # print(request.data)
+        # print(self.get_queryset())
+        queryset = self.get_queryset()
+        # print('+++++++++++++', queryset)
+        serializer = [ListGisPOISerializer(i) for i in queryset]
+        data = [i.data for i in serializer]
+        print(data)
+        return Response(data) #super().get(self, request, *args, **kwargs)
