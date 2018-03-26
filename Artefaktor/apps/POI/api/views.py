@@ -14,6 +14,7 @@ from rest_framework_elasticsearch import es_views, es_pagination, es_filters
 from apps.POI.esearch import GisPOIIndex
 from rest_framework.response import Response
 
+
 class CustomPagePagination(PageNumberPagination):
     #class for set pagination parameters
     page_size = 10 #obj in page
@@ -65,7 +66,7 @@ class ListCategoryView(generics.ListAPIView):
 
 
 class GisPOIESView(es_views.ListElasticAPIView):
-    print('in view')
+    # print('in view')
     serializer_class = ListGisPOISerializer
     es_client = Elasticsearch(hosts=['http://localhost:9200/'],connection_class=RequestsHttpConnection)
     es_model = GisPOIIndex
@@ -76,7 +77,7 @@ class GisPOIESView(es_views.ListElasticAPIView):
     def do_search(self):
         search =super().do_search()
         objs = GisPOI_model.objects.filter(pk__in=[i.id for i in search])
-        # print(objs,"!YES, it's POIs!!!!!!!!!!!!!!!!!") # !YES, it's POIs!!!!!!!!!!!!!!!!!
+        # print(objs,"!YES, it's POIs!!!!!!!!!!!!!!!!!") #
         return  search #, objs
 
     def get_queryset(self, *args, **kwargs):
@@ -88,11 +89,13 @@ class GisPOIESView(es_views.ListElasticAPIView):
         return objs
 
     def get(self, request, *args, **kwargs):
-        # print(request.data)
-        # print(self.get_queryset())
         queryset = self.get_queryset()
-        # print('+++++++++++++', queryset)
-        serializer = [ListGisPOISerializer(i) for i in queryset]
+        # paginator = CustomPagePagination()
+        # result_page = paginator.paginate_queryset(queryset, request)
+        # serializer = GisPOISerializer(result_page, many = True)
+        # res = paginator.get_paginated_response(serializer.data)
+        serializer = [GisPOISerializer(i) for i in queryset]
         data = [i.data for i in serializer]
-        print(data)
-        return Response(data) #super().get(self, request, *args, **kwargs)
+        # print(data)
+
+        return Response(data) #super().get(self, request, *args, **kwargs) # data
