@@ -1,4 +1,6 @@
 from django.conf.urls import url
 
 
-url(r'^$', LayarView.as_view()),
+urlpatterns = [
+    # url(r'^$', LayarView.as_view()),
+    ]
