@@ -8,7 +8,7 @@ from rest_framework_elasticsearch.es_serializer import ElasticModelSerializer
 from apps.POI.esearch import GisPOIIndex
 
 class CategorySerializer(serializers.ModelSerializer):
-    #parent = ParentSerializer()
+
     class Meta:
         model = Category
         fields = (
@@ -43,7 +43,7 @@ class NewDraftGisPOISerializer(GeoFeatureModelSerializer): #TaggitSerializer,
     longitude = serializers.FloatField(write_only = True)
     tags = TagListSerializerField()
     add_tags = serializers.CharField(write_only = True) # enter words separated by a coma+space
-    #add_category = serializers.CharField(write_only = True)
+    # add_category = serializers.CharField(write_only = True)
 
     class Meta:
         model = DraftGisPOI
