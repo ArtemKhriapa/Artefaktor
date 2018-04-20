@@ -60,6 +60,17 @@ class GisPOI(BaseGisPOI):
     def __str__(self):
         return "ID: %s" % (self.id)
 
+    @property
+    def anchor(self):
+        return {"geolocation": { "lat": self.point.coords[1], "lon": self.point.coords[0] }}
+
+    @property
+    def text(self):
+        return {
+         "title": self.name,
+         "description": self.description,
+        }
+
     def indexing(self):
         # print('indexing')
         obj = GisPOIIndex(
