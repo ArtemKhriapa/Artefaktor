@@ -1,5 +1,5 @@
 from django.db import models
-import django.db.models.signals.post_save
+from django.db.models.signals import post_save
 
 # Create your models here.
 class MailerLogModel(models.Model):

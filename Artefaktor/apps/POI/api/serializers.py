@@ -17,7 +17,7 @@ class CategorySerializer(serializers.ModelSerializer):
         )
 
 
-class GisPOISerializer(GeoFeatureModelSerializer,serializers.HyperlinkedModelSerializer):#, serializers.HyperlinkedModelSerializer
+class GisPOISerializer(GeoFeatureModelSerializer):#, serializers.HyperlinkedModelSerializer
 
     tags = TagListSerializerField()
     category = CategorySerializer(read_only=True, many=True)
@@ -119,6 +119,7 @@ class ListGisPOISerializer(TaggitSerializer,GeoFeatureModelSerializer):
 
 class ListESSerializer(ElasticModelSerializer):
     tags = TagListSerializerField()
+
     #point = GisPOISerializer
     class Meta:
         #model = GisPOI

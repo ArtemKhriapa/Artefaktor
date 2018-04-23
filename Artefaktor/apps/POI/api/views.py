@@ -78,7 +78,7 @@ class GisPOIESView(es_views.ListElasticAPIView):
         search =super().do_search()
         objs = GisPOI_model.objects.filter(pk__in=[i.id for i in search])
         # print(objs,"!YES, it's POIs!!!!!!!!!!!!!!!!!") #
-        return  search #, objs
+        return  search
 
     def get_queryset(self, *args, **kwargs):
         # print('in get QS')
@@ -90,11 +90,8 @@ class GisPOIESView(es_views.ListElasticAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        # paginator = CustomPagePagination()
-        # result_page = paginator.paginate_queryset(queryset, request)
-        # serializer = GisPOISerializer(result_page, many = True)
-        # res = paginator.get_paginated_response(serializer.data)
         serializer = [GisPOISerializer(i) for i in queryset]
+        # print(serializer)
         data = [i.data for i in serializer]
         # print(data)
 
