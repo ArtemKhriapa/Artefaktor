@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from apps.extraapps.OTC.models import OTCRegistration
 from django.contrib.auth.models import User
-
+from apps.extraapps.Mailer.models import EmailLog
 
 
 class RegistrationTry(models.Model):
@@ -32,6 +32,13 @@ class RegistrationTry(models.Model):
         if not self.id:
             new_otc = OTCRegistration.objects.create()
             self.otc = new_otc
+            reason = 'Confirmation of registration'
+            mail = EmailLog.objects.create(
+                mail_to=self.email,
+                text =str('Follow the link' + self.otc.link + 'to confirm your registration'))
+            mail.save()
+            mail.sendmail(reason)
             # somewhere in this place send link (OTC.link) to self.user_email
+
         return super().save(*args, **kwargs)
 

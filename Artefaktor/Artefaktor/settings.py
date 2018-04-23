@@ -182,3 +182,11 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '161ef8555417b340fff785894ab6e08d'  # App Secret
 
 SOCIAL_AUTH_GOOGE_KEY = '657928198709-fho4mgmevjdk2biojckgvtfe5m75mf5q.apps.googleusercontent.com'  # App ID
 SOCIAL_AUTH_GOOGE_SECRET = '5WVe9SuY_hbzRJdocmmr8zH2'  # App Secret
+
+EMAIL_HOST = 'mail.ukr.net'
+EMAIL_HOST_USER = 'artefaktor@ukr.net'
+EMAIL_HOST_PASSWORD = 'in_local_settings'
+DEFAULT_FROM_EMAIL = 'artefaktor@ukr.net'
+SERVER_EMAIL = 'artefaktor@ukr.net'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = False

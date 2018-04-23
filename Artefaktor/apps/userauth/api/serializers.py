@@ -2,6 +2,7 @@ from rest_framework import serializers
 from apps.userauth.models import RegistrationTry
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
+from apps.extraapps.Mailer.models import EmailLog
 
 
 class RegTrySerializer(serializers.ModelSerializer):
@@ -55,5 +56,11 @@ class SetPassSerialazer(serializers.ModelSerializer):
         registration = RegistrationTry.objects.get(username = user.username)
         registration.user = user
         registration.finish()       #utilization RegistrationTry
-
+        # in this place email user create
+        reason = 'Finishing registration'
+        mail = EmailLog.objects.create(
+            mail_to=str(self.context['email']),
+            text ='Greetings! Now your a "CHLEN"! Registration confirmed')
+        mail.save()
+        mail.sendmail(reason)
         return user
