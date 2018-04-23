@@ -62,7 +62,8 @@ INSTALLED_APPS = [
 
     'apps.extraapps.OTC',
     'apps.extraapps.notifications',
-    'apps.extraapps.images'
+    'apps.extraapps.images',
+    'apps.extraapps.Mailer'
 
 ]
 
